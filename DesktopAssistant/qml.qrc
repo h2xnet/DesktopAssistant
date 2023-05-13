@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>hxxui/bar/TitleBar.qml</file>
+        <file>image/default/close_normal.png</file>
+        <file>js/common/CommonEvent.js</file>
+        <file>hxxui/window/mouse/MouseDrag.qml</file>
+        <file>hxxui/window/mouse/MoveMouseArea.qml</file>
+        <file>image/default/max_normal.png</file>
+        <file>hxxui/bar/FloatBar.qml</file>
+        <file>hxxui/button/ImageColorButton.qml</file>
+        <file>hxxui/tab/TabViewExt.qml</file>
+        <file>views/default/DefaultTabView.qml</file>
+        <file>views/default/tabpages/DefaultTabPage.qml</file>
+    </qresource>
+</RCC>
