@@ -8,6 +8,8 @@
 //#include <Windows.h>
 //#endif
 
+namespace base {
+
 FileUtil::FileUtil() {
 
 }
@@ -44,3 +46,5 @@ bool FileUtil::pathIsExist(const QString& path, bool isCreated) {
     }
     return dir.exists();
 }
+
+} // end namespace base

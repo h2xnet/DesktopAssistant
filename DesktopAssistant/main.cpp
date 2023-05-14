@@ -25,11 +25,11 @@ int main(int argc, char *argv[])
     int ret = -1;
     // 清理日志文件
     QString logFileName("DesktopAssistant.log");
-    Log::clearLogFiles(logFileName, 7);
+    base::Log::clearLogFiles(logFileName, 7);
 
     // 初始化日志
-    Log::setLogRange(0);
-    Log::init(logFileName);
+    base::Log::setLogRange(0);
+    base::Log::init(logFileName);
 
     ret = g_app.init();
     qInfo() << "主程序应用初始化结果:" << ret;

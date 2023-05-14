@@ -3,6 +3,8 @@
 
 #include <QProcess>
 
+namespace base {
+
 /*
  * ClassName: ChildProcess
  * Desc: 子进程处理类
@@ -17,5 +19,7 @@ public:
     virtual ~ChildProcess();
 
 };
+
+} // end namespace base
 
 #endif // CHILD_PROCESS_H

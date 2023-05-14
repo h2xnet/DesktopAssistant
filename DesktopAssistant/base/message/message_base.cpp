@@ -1,10 +1,19 @@
 #include "message_base.h"
 
-MessageBase::MessageBase()
-{
+namespace base {
 
+qint32 MessageBase::getSequeCount() {
+    static qint32 sequeCount = 0;
+    return (sequeCount++);
+}
+
+MessageBase::MessageBase() : sequeNo(0), type(eMessageType::eEventType)
+{
+    sequeNo = getSequeCount();
 }
 
 MessageBase::~MessageBase() {
 
 }
+
+} // end namespace base

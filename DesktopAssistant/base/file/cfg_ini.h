@@ -3,6 +3,8 @@
 
 #include <QString>
 
+namespace base {
+
 /*
  * ClassName: CfgIni
  * Desc: INI配置文件操作类
@@ -44,5 +46,7 @@ private:
 
     QString file_name_;
 };
+
+} // end namespace base
 
 #endif // CFGINI_H

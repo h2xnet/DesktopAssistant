@@ -9,6 +9,8 @@
 #include <QMutex>
 #include <QTextStream>
 
+namespace base {
+
 static QMutex mutex_;
 static QFile* file_ = nullptr;
 static QString log_file_name_ = QString("log.log");
@@ -208,3 +210,5 @@ void Log::uninit() {
 bool Log::OnLogCanOutput(QtMsgType logMsgType) {
     return (log_range_ <= (int)logMsgType ? true : false);
 }
+
+} // end namespace base

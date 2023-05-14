@@ -27,6 +27,7 @@ SOURCES += \
         base/file/file_util.cpp \
         base/log/log.cpp \
         base/message/message_base.cpp \
+        base/message/message_queue.cpp \
         base/thread/service_thread.cpp \
         base/thread/thread_base.cpp \
         main.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     base/file/file_util.h \
     base/log/log.h \
     base/message/message_base.h \
+    base/message/message_queue.h \
     base/thread/service_thread.h \
     base/thread/thread_base.h \
     third-part/systemTray/systemCursor/system_cursor_deal.h \

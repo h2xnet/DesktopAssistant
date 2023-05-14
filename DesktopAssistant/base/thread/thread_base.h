@@ -3,6 +3,8 @@
 
 #include <QThread>
 
+namespace base {
+
 /*
  * ClassName: ThreadBase
  * Desc: 线程基类，做为所有线程的接口
@@ -28,5 +30,7 @@ public:
     virtual int onWork() = 0;
 
 };
+
+} // end namespace base
 
 #endif // THREAD_BASE_H

@@ -4,6 +4,8 @@
 
 #include <QSettings>
 
+namespace base {
+
 CfgIni::CfgIni() {
 
 }
@@ -92,3 +94,5 @@ bool CfgIni::writeStringValue(QString key, QString value) {
     ini.setValue(key, value);
     return true;
 }
+
+} // end namespace base

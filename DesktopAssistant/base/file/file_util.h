@@ -3,6 +3,8 @@
 
 #include <QString>
 
+namespace base {
+
 class FileUtil
 {
 public:
@@ -42,5 +44,7 @@ public:
     static bool pathIsExist(const QString& path, bool isCreated);
 
 };
+
+} // end namespace base
 
 #endif // FILEUTIL_H

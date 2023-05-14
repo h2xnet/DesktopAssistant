@@ -4,6 +4,8 @@
 #include <qlogging.h>
 #include <QString>
 
+namespace base {
+
 class Log {
 public:
     Log();
@@ -29,5 +31,7 @@ private:
     static bool OnLogCanOutput(QtMsgType logMsgType);
 
 };
+
+} // end namespace base
 
 #endif // LOG_H
