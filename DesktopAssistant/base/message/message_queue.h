@@ -41,6 +41,14 @@ public:
 
     void clear();
 
+    /*
+     * Func: moveTo
+     * Desc: 将队列元素全部转换到目标队列
+     * Author: zfs
+     * Date: 2023-05-15 07:08
+     */
+    int moveTo(MessageQueue& toQue);
+
 private:
 
     bool m_running;

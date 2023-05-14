@@ -22,11 +22,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         app.cpp \
+        base/buffer/buffer.cpp \
         base/childProcess/child_process.cpp \
+        base/exception/exception.cpp \
         base/file/cfg_ini.cpp \
         base/file/file_util.cpp \
         base/log/log.cpp \
         base/message/message_base.cpp \
+        base/message/message_handler_base.cpp \
         base/message/message_queue.cpp \
         base/thread/service_thread.cpp \
         base/thread/thread_base.cpp \
@@ -49,11 +52,15 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     app.h \
+    base/buffer/buffer.h \
     base/childProcess/child_process.h \
+    base/exception/error.h \
+    base/exception/exception.h \
     base/file/cfg_ini.h \
     base/file/file_util.h \
     base/log/log.h \
     base/message/message_base.h \
+    base/message/message_handler_base.h \
     base/message/message_queue.h \
     base/thread/service_thread.h \
     base/thread/thread_base.h \

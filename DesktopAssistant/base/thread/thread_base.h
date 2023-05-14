@@ -5,6 +5,9 @@
 
 namespace base {
 
+// 默认加锁超时时间，单位：毫秒
+#define DEF_LOCK_TIMEOUT    5000
+
 /*
  * ClassName: ThreadBase
  * Desc: 线程基类，做为所有线程的接口
@@ -24,10 +27,38 @@ public:
     virtual int getMaxTaskCount() = 0;
     virtual void setMaxTaskCount(int val) = 0;
 
-    //
-    // onWork : 线程工作函数
-    //
+    /*
+     * Func: onWork
+     * Desc: 线程工作函数
+     * Author: zfs
+     * Date: 2023-05-14 15:59
+     */
     virtual int onWork() = 0;
+
+protected:
+    /*
+     * Func: onLoadTask
+     * Desc: 加载待处理任务到工作队列
+     * Author: zfs
+     * Date: 2023-05-15 06:59
+     */
+    virtual int onLoadTask() = 0;
+
+    /*
+     * Func: onLoadNextTask
+     * Desc: 加载进入下轮循环的任务到工作队列
+     * Author: zfs
+     * Date: 2023-05-15 06:59
+     */
+    virtual int onLoadNextTask() {  return 0; }
+
+    /*
+     * Func: onProcessWorkTask
+     * Desc: 处理工作队列中的任务
+     * Author: zfs
+     * Date: 2023-05-15 07:00
+     */
+    virtual int onProcessWorkTask() = 0;
 
 };
 

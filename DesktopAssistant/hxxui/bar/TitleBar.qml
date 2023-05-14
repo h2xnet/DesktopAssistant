@@ -19,12 +19,12 @@ Rectangle {
     color: backgroudColor
     radius: backgroudRadius
 
-    MouseArea {
+    /*MouseArea {
         anchors.fill: parent
         onDoubleClicked: {
             onClickEvent("sysMaxBtnId");
         }
-    }
+    }*/
 
     // 标题文本
     Text {

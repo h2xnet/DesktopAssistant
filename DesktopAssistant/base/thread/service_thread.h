@@ -3,8 +3,10 @@
 
 #include "base/thread/thread_base.h"
 #include "base/message/message_queue.h"
+#include "base/message/message_handler_base.h"
 
 #include <QMutex>
+#include <QMutexLocker>
 
 namespace base {
 
@@ -12,7 +14,7 @@ class ServiceThread : public ThreadBase
 {
     Q_OBJECT
 public:
-    ServiceThread(QObject* parent = nullptr);
+    ServiceThread(base::MessageHandlerBase* pMsgHandler, QObject* parent = nullptr);
     virtual ~ServiceThread();
 
     //
@@ -35,7 +37,7 @@ public:
      * @data: 任务请求数据，主要是请求参数，可以为空
      * @owner: 传递的自定义数据，可以为空
      */
-    Q_INVOKABLE int addTask(int type, QString data, QString owner);
+    Q_INVOKABLE int addTask(int type, QString data, QString owner, int timeout = DEF_LOCK_TIMEOUT);
 
 
 public slots:
@@ -47,7 +49,19 @@ signals:
 
 
 protected:
+    //
+    // QThread
+    //
     virtual void run() override;
+
+
+protected:
+    //
+    // ThreadBase
+    //
+    virtual int onLoadTask() override;
+    virtual int onLoadNextTask() override;
+    virtual int onProcessWorkTask() override;
 
 private:
     bool m_running;
@@ -57,6 +71,8 @@ private:
     QMutex m_mutex;
     MessageQueue m_task_queue; // 任务队列
     MessageQueue m_work_queue; // 当前工作队列
+
+    base::MessageHandlerBase* m_message_handler; // 消息处理器
 
 };
 

@@ -77,9 +77,24 @@ void MessageQueue::clear() {
     base::MessageBase* pHead = nullptr;
     while(!m_queue.isEmpty()) {
         pHead = m_queue.dequeue();
-        delete pHead;
-        pHead = nullptr;
+        if (pHead) {
+            delete pHead;
+            pHead = nullptr;
+        }
     }
+}
+
+int MessageQueue::moveTo(MessageQueue& toQue) {
+    int count = 0;
+
+    base::MessageBase* pHead = nullptr;
+    while(!m_queue.isEmpty()) {
+        pHead = m_queue.dequeue();
+        if (pHead) {
+            toQue.addItem(pHead);
+        }
+    }
+    return count;
 }
 
 
