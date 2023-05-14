@@ -143,7 +143,7 @@ Window {
         FloatBar {
             id: floatBarId
 
-            visible: isFullScreen
+            visible: false
             anchors {
                 top: parent.top
                 topMargin: mainWndId.titleBarHeight

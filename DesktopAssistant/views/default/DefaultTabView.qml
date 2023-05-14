@@ -57,7 +57,7 @@ Rectangle {
         let tabPageTitle3 = "新标签页3";
         let tabPageName3 = "tab3";
         ret = tabViewId.addNewTabPage(tabPageName3, tabPageTitle3, tabPageUrl3,
-                                      { backgroudColor: "#2522FF"}
+                                      { backgroudColor: "#25229F"}
                                       );
         console.log("DefaultTableView.qml Component.onCompleted addNewTabPage status:" + ret);
 
@@ -65,7 +65,7 @@ Rectangle {
         let tabPageTitle4 = "新标签页4";
         let tabPageName4 = "tab4";
         ret = tabViewId.addNewTabPage(tabPageName4, tabPageTitle4, tabPageUrl4,
-                                      { backgroudColor: "#25FFFF"}
+                                      { backgroudColor: "#85FF00"}
                                       );
         console.log("DefaultTableView.qml Component.onCompleted addNewTabPage status:" + ret);
 
@@ -73,7 +73,7 @@ Rectangle {
         let tabPageTitle5 = "新标签页5";
         let tabPageName5 = "tab5";
         ret = tabViewId.addNewTabPage(tabPageName5, tabPageTitle5, tabPageUrl5,
-                                      { backgroudColor: "#25F23F"}
+                                      { backgroudColor: "#25823F"}
                                       );
         console.log("DefaultTableView.qml Component.onCompleted addNewTabPage status:" + ret);
 
