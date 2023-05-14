@@ -25,7 +25,9 @@ SOURCES += \
         base/file/cfg_ini.cpp \
         base/file/file_util.cpp \
         base/log/log.cpp \
-        main.cpp
+        main.cpp \
+        third-part/systemTray/systemCursor/system_cursor_deal.cpp \
+        third-part/systemTray/systemTray/system_tray_icon.cpp
 
 RESOURCES += qml.qrc
 
@@ -44,4 +46,6 @@ HEADERS += \
     app.h \
     base/file/cfg_ini.h \
     base/file/file_util.h \
-    base/log/log.h
+    base/log/log.h \
+    third-part/systemTray/systemCursor/system_cursor_deal.h \
+    third-part/systemTray/systemTray/system_tray_icon.h

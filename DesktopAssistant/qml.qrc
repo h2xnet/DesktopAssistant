@@ -12,5 +12,14 @@
         <file>hxxui/tab/TabViewExt.qml</file>
         <file>views/default/DefaultTabView.qml</file>
         <file>views/default/tabpages/DefaultTabPage.qml</file>
+        <file>hxxui/tab/TabPageView.qml</file>
+        <file>image/default/rightPageArrow.png</file>
+        <file>image/logo/logo.png</file>
+        <file>hxxui/menu/SettingsMenu.qml</file>
+        <file>image/default/settings_normal.png</file>
+        <file>image/default/start_menu.png</file>
+        <file>image/default/start_menu2.png</file>
+        <file>image/default/start_menu3.png</file>
+        <file>hxxui/menu/StartMenu.qml</file>
     </qresource>
 </RCC>

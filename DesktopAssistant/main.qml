@@ -8,6 +8,9 @@ import QtGraphicalEffects 1.0
 
 import "./hxxui/window/mouse"
 import "./hxxui/bar"
+import "./hxxui/menu"
+
+import desktopAssistant.net.pc 1.0
 
 Window {
     id: mainWndId
@@ -22,6 +25,8 @@ Window {
     property bool isFullScreen: false // 全屏标志
     property int backgroudWidth: 800 // 背景宽
     property int backgroudHeight: 600 // 背景高
+    property int minBackgroudWidth: 800
+    property int minBackgroudHeight: 600
 
     // 标题栏
     property var titleBarText: "桌面助手 V1.0"
@@ -34,7 +39,61 @@ Window {
         id: mourseDragId
 
         target: mainWndId
+
     } // end MouseDrag
+
+    //
+    // 系统托盘
+    //
+    //
+    // 系统托盘
+    //
+    SystemTrayIcon {
+        id: systemTrayId
+
+        visible: true
+
+        menu: menuId
+        icon: "qrc:/image/logo/logo.png"
+        toolTip: "桌面助手"
+        onTrigger: {
+            // 单击系统托盘
+            showMainWnd();
+
+            // 托盘单击事件
+            onSystemTrayClick();
+        }
+
+        MyMenu {
+            id: menuId
+
+            MyAction {
+                id: exitItem
+                text: qsTr("退出")
+                onTriggered: {
+                    console.info("main.qml systemTrap close event");
+                    onCloseAppEvent(0);
+                }
+            }
+        }
+    } // end SystemTrayIcon
+
+    //
+    // 系统设置
+    //
+    SettingsMenu {
+        id: settingsMenuId
+
+        visible: false;
+    }
+
+    //
+    // 开始菜单
+    //
+    StartMenu {
+        id: startMenuId
+        visible: false
+    }
 
     flags: Qt.Tool | Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.MSWindowsFixedSizeDialogHint
 
@@ -45,7 +104,8 @@ Window {
 
     width: (isFullScreen ? Screen.desktopAvailableWidth : backgroudWidth)
     height: (isFullScreen ? Screen.desktopAvailableHeight : backgroudHeight)
-
+    minimumWidth: minBackgroudWidth
+    minimumHeight: minBackgroudHeight
 
     // backgroup
     Rectangle {
@@ -71,7 +131,7 @@ Window {
         TitleBar {
             id: titleBarId
 
-            visible: !isFullScreen
+            //visible: !isFullScreen
 
             parentControl: mainWndId
             width: parent.width
@@ -86,9 +146,9 @@ Window {
             visible: isFullScreen
             anchors {
                 top: parent.top
-                topMargin: 30
+                topMargin: mainWndId.titleBarHeight
                 right: parent.right
-                rightMargin: 30
+                rightMargin: 5
             }
 
             parentControl: mainWndId
@@ -158,8 +218,27 @@ Window {
     function onCloseAppEvent(exitCode = 0) {
         console.info("main.qml onCloseApp, exitCode:" + exitCode);
 
+        systemTrayId.visible = false;
+
         mainWndId.close();
         Qt.quit();
+    }
+
+    //
+    // showMainWnd : 显示主窗口
+    //
+    function showMainWnd() {
+        // 显示主界面
+        mainWndId.showNormal();
+        mainWndId.requestActivate();
+        mainWndId.show();
+    }
+
+    //
+    // hideMainWnd : 隐藏主窗口
+    //
+    function hideMainWnd() {
+        mainWndId.visible = false;
     }
 
     //
@@ -170,7 +249,8 @@ Window {
 
         if (eventName === "sysCloseBtnId") {
             // 关闭事件
-            onCloseAppEvent(0);
+            //onCloseAppEvent(0);
+            hideMainWnd();
         }
         else if (eventName === "sysMaxBtnId") {
             // 最大化按钮
@@ -179,6 +259,14 @@ Window {
         else if (eventName === "sysRestoreBtnId") {
             // 恢复
             onMaxEvent();
+        }
+        else if (eventName === "sysSettingsBtnId") {
+            // 设置按钮
+            onSettingsEvent();
+        }
+        else if (eventName === "startMenuBtnId") {
+            // 开始菜单
+            onStartMenuEvent();
         }
     }
 
@@ -198,6 +286,31 @@ Window {
         mainWndId.setWidth(isFullScreen ? Screen.desktopAvailableWidth : backgroudWidth);
         mainWndId.setHeight(isFullScreen ? Screen.desktopAvailableHeight : backgroudHeight);
 
+    }
+
+    //
+    // onSettingsEvent : 设置事件
+    //
+    function onSettingsEvent() {
+        settingsMenuId.x = mainWndId.width - settingsMenuId.width - 15;
+        settingsMenuId.y = titleBarHeight;
+        settingsMenuId.beginShow();
+    }
+
+    //
+    // onSystemTrayClick : 单击托盘事件
+    //
+    function onSystemTrayClick() {
+        console.log("main.qml onSystemTrayClick");
+    }
+
+    //
+    // onStartMenuEvent : 开始菜单事件
+    //
+    function onStartMenuEvent() {
+        startMenuId.x = mainWndId.width - startMenuId.width - 15;
+        startMenuId.y = titleBarHeight;
+        startMenuId.beginShow();
     }
 
 }

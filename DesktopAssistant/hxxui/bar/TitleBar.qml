@@ -28,6 +28,63 @@ Rectangle {
         text: titleBarText
     }
 
+    // 开始菜单按钮
+    ImageColorButton {
+        id: startMenuBtnId
+
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: parent.right
+            rightMargin: 130
+        }
+
+        tipText: "开始"
+        imageWidth: 24
+        imageHeight: 24
+        normalColor: "#FFFFFF"
+        hoverColor: "#F5F5F5"
+        normalImageUrl: "qrc:/image/default/start_menu2.png"
+        hoverImageUrl: "qrc:/image/default/start_menu2.png"
+
+        width: 30
+        height: 30
+        color: "transparent"
+
+        onClicked: {
+            onClickEvent("startMenuBtnId");
+        }
+
+    } // end startMenuBtnId
+
+    // 设置按钮
+    ImageColorButton {
+        id: sysSettingsBtnId
+
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: parent.right
+            rightMargin: 85
+        }
+
+        tipText: "系统设置"
+        imageWidth: 14
+        imageHeight: 14
+        normalColor: "#FFFFFF"
+        hoverColor: "#F5F5F5"
+        normalImageUrl: "qrc:/image/default/settings_normal.png"
+        hoverImageUrl: "qrc:/image/default/settings_normal.png"
+
+        width: 30
+        height: 30
+        color: "transparent"
+
+        onClicked: {
+            onClickEvent("sysSettingsBtnId");
+        }
+
+
+    } // end sysSettingsBtnId ImageColorButton
+
     // 最大化按钮
     ImageColorButton {
         id: sysMaxBtnId
@@ -38,6 +95,7 @@ Rectangle {
             rightMargin: 50
         }
 
+        tipText: "最大化"
         imageWidth: 14
         imageHeight: 14
         normalColor: "#FFFFFF"
@@ -65,6 +123,7 @@ Rectangle {
             rightMargin: 15
         }
 
+        tipText: "关闭"
         imageWidth: 14
         imageHeight: 14
         normalColor: "#FFFFFF"

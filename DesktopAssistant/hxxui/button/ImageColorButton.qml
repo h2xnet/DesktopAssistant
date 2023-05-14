@@ -8,6 +8,8 @@ Rectangle {
 
     property alias backgroudId: backgroudImageId
 
+    property var tipText: ""
+
     property var normalImageUrl: ""
     property var hoverImageUrl: ""
 
@@ -32,6 +34,18 @@ Rectangle {
         source: normalImageUrl
     }
 
+    ToolTip {
+        id: toolTipId
+
+        delay: Qt.styleHints.mousePressAndHoldInterval
+        text: tipText
+        onOpened:{
+           if (!mouseAreaId.containsMouse) {
+               close()
+           }
+        }
+    }
+
     MouseArea {
         anchors.fill: parent
 
@@ -45,6 +59,10 @@ Rectangle {
         onEntered: {
             color: hoverColor
             backgroudId.source = hoverImageUrl;
+
+            if (tipText !== "") {
+                toolTipId.visible = true;
+            }
         }
 
         onPressed: {
@@ -55,6 +73,10 @@ Rectangle {
         onExited: {
             color: normalColor
             backgroudId.source = normalImageUrl;
+
+            if (tipText !== "") {
+                toolTipId.visible = false;
+            }
         }
 
         onReleased: {
