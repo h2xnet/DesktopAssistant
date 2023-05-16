@@ -7,17 +7,17 @@
 namespace core {
 
 /*
- * ClassName: ChildProcessService
- * Desc: 子进程管理服务类
+ * ClassName: ChildViewService
+ * Desc: 子页面管理服务类
  * Author: zfs
  * Date: 2023-05-16 21:04
  */
-class ChildProcessService : public base::ServiceThread, public core::DefaultMessageHandler
+class ChildViewService : public base::ServiceThread, public core::DefaultMessageHandler
 {
     Q_OBJECT
 public:
-    ChildProcessService(QObject* parent = nullptr);
-    virtual ~ChildProcessService();
+    ChildViewService(QObject* parent = nullptr);
+    virtual ~ChildViewService();
 
     //
     // core::DefaultMessageHandler

@@ -23,7 +23,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         app.cpp \
         base/buffer/buffer.cpp \
-        base/childProcess/child_process.cpp \
+        base/childProcess/child_process_base.cpp \
+        base/childProcess/default_child_process.cpp \
         base/exception/exception.cpp \
         base/file/cfg_ini.cpp \
         base/file/file_util.cpp \
@@ -36,7 +37,8 @@ SOURCES += \
         base/thread/service_thread.cpp \
         base/thread/thread_base.cpp \
         core/message/default_message_handler.cpp \
-        core/service/child_process_service.cpp \
+        core/process/view_process.cpp \
+        core/service/child_view_service.cpp \
         main.cpp \
         manager.cpp \
         third-part/systemTray/systemCursor/system_cursor_deal.cpp \
@@ -58,7 +60,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     app.h \
     base/buffer/buffer.h \
-    base/childProcess/child_process.h \
+    base/childProcess/child_process_base.h \
+    base/childProcess/default_child_process.h \
     base/define.h \
     base/exception/error.h \
     base/exception/exception.h \
@@ -73,7 +76,8 @@ HEADERS += \
     base/thread/service_thread.h \
     base/thread/thread_base.h \
     core/message/default_message_handler.h \
-    core/service/child_process_service.h \
+    core/process/view_process.h \
+    core/service/child_view_service.h \
     manager.h \
     third-part/systemTray/systemCursor/system_cursor_deal.h \
     third-part/systemTray/systemTray/system_tray_icon.h
