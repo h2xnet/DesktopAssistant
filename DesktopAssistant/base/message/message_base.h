@@ -30,6 +30,9 @@ public:
     int type; // 消息类型
     QString data; // 消息数据
     QString owner; // 自定义数据
+
+    QString sender; // 发送者
+    QString recver; // 接收者
 };
 
 } // end namespace base

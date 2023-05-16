@@ -2,7 +2,7 @@
 
 #include <QTextCodec>
 
-App::App()
+App::App(QObject* parent) : QObject(parent)
 {
 
 }

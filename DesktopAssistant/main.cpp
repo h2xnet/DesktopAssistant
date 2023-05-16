@@ -11,9 +11,27 @@
 #include "third-part/systemTray/systemCursor/system_cursor_deal.h"
 #include "third-part/systemTray/systemTray/system_tray_icon.h"
 
+#include "manager.h"
+
 using namespace SystemCursorDealSpace;
 
-App g_app;
+App g_app; // 应用对象
+Manager g_manager; // 管理器对象
+
+static QObject* AppSingleProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return &g_app;
+}
+
+static QObject* ManagerSingleProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return &g_manager;
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -33,6 +51,14 @@ int main(int argc, char *argv[])
 
     ret = g_app.init();
     qInfo() << "主程序应用初始化结果:" << ret;
+
+    ret = g_manager.init(argc, argv);
+    qInfo() << "程序管理器初始化结果:" << ret;
+
+    // 单列全局对象
+    qmlRegisterSingletonType<App>("desktopAssistant.net.pc", 1, 0, "AppId", AppSingleProvider);  // 注册应用类型
+    qmlRegisterSingletonType<Manager>("desktopAssistant.net.pc", 1, 0, "ManagerId", ManagerSingleProvider);  // 注册管理类型
+
 
     // 系统托盘
     qmlRegisterType<MyMenu>("desktopAssistant.net.pc", 1, 0, "MyMenu");

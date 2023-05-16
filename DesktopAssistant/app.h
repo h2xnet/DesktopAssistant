@@ -4,10 +4,11 @@
 #include <QDebug>
 #include <QString>
 
-class App
+class App : public QObject
 {
+    Q_OBJECT
 public:
-    App();
+    App(QObject* parent = nullptr);
     ~App();
 
     bool init();

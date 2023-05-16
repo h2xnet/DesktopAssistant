@@ -28,7 +28,7 @@ public:
     void setMaxCount(int val)   {   m_max_count = val;  }
     int getMaxCount() const {   return m_max_count; }
 
-    bool addItem(int type, QString data, QString owner, int sequeNo = 0);
+    bool addItem(int type, QString data, QString owner, QString sender, QString reciver, int sequeNo = 0);
     bool addItem(base::MessageBase* pMsg);
 
     base::MessageBase* getHeadItem(bool isRemove = true);

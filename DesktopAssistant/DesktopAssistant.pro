@@ -28,12 +28,17 @@ SOURCES += \
         base/file/cfg_ini.cpp \
         base/file/file_util.cpp \
         base/log/log.cpp \
+        base/message/ipc/local_socket_client.cpp \
+        base/message/ipc/local_socket_server.cpp \
         base/message/message_base.cpp \
         base/message/message_handler_base.cpp \
         base/message/message_queue.cpp \
         base/thread/service_thread.cpp \
         base/thread/thread_base.cpp \
+        core/message/default_message_handler.cpp \
+        core/service/child_process_service.cpp \
         main.cpp \
+        manager.cpp \
         third-part/systemTray/systemCursor/system_cursor_deal.cpp \
         third-part/systemTray/systemTray/system_tray_icon.cpp
 
@@ -54,15 +59,21 @@ HEADERS += \
     app.h \
     base/buffer/buffer.h \
     base/childProcess/child_process.h \
+    base/define.h \
     base/exception/error.h \
     base/exception/exception.h \
     base/file/cfg_ini.h \
     base/file/file_util.h \
     base/log/log.h \
+    base/message/ipc/local_socket_client.h \
+    base/message/ipc/local_socket_server.h \
     base/message/message_base.h \
     base/message/message_handler_base.h \
     base/message/message_queue.h \
     base/thread/service_thread.h \
     base/thread/thread_base.h \
+    core/message/default_message_handler.h \
+    core/service/child_process_service.h \
+    manager.h \
     third-part/systemTray/systemCursor/system_cursor_deal.h \
     third-part/systemTray/systemTray/system_tray_icon.h
