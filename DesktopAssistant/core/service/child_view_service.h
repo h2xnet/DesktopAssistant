@@ -3,6 +3,9 @@
 
 #include "base/thread/service_thread.h"
 #include "core/message/default_message_handler.h"
+#include "core/process/view_process.h"
+
+#include <QMap>
 
 namespace core {
 
@@ -16,6 +19,9 @@ class ChildViewService : public base::ServiceThread, public core::DefaultMessage
 {
     Q_OBJECT
 public:
+    // 页面进程列表
+    typedef QMap<QString, ViewProcess*> ViewProcessMap;
+
     ChildViewService(QObject* parent = nullptr);
     virtual ~ChildViewService();
 

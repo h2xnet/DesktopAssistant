@@ -5,6 +5,9 @@
 #include "app.h"
 
 #include "base/log/log.h"
+#include "base/tool/command_line.h"
+
+#include "core/startup/startup.h"
 
 
 // 系统托盘
@@ -17,6 +20,8 @@ using namespace SystemCursorDealSpace;
 
 App g_app; // 应用对象
 Manager g_manager; // 管理器对象
+base::CommandLine g_command_line; // 命令行参数
+core::Startup g_startup; // 启动器
 
 static QObject* AppSingleProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
     Q_UNUSED(engine)
@@ -36,11 +41,27 @@ static QObject* ManagerSingleProvider(QQmlEngine *engine, QJSEngine *scriptEngin
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, false);
+    QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL, true);
 
+    int ret = -1;
+    QString strValue;
+    // 根据输入的参数，启动不同的进程
+    g_command_line.parse(argc, argv);
+    if (g_command_line.contain(base::CommandLine::getStartViewKey())) {
+        // 子页面进程
+        strValue = g_command_line.getItemValue(base::CommandLine::getStartViewKey());
+        if (strValue.compare("on", Qt::CaseInsensitive) == 0) {
+            // 子页面进程
+            ret = g_startup.startViewChildProcess(argc, argv);
+            return ret;
+        }
+    }
+
+    // 主窗口进程
     //QGuiApplication app(argc, argv);
     QApplication app(argc, argv);
 
-    int ret = -1;
     // 清理日志文件
     QString logFileName("DesktopAssistant.log");
     base::Log::clearLogFiles(logFileName, 7);

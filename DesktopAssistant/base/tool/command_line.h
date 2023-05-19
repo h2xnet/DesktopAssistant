@@ -26,7 +26,15 @@ public:
 
     void print();
 
+    //
+    // getExeFileNameKey : 应用程序键名
+    //
     static const char* getExeFileNameKey();
+
+    //
+    // getStartViewKey : 启动视图键名
+    //
+    static const char* getStartViewKey();
 
 private:
     QStringList onStringSplit(QString str, const QString& separate);

@@ -36,8 +36,9 @@ int CommandLine::parse(int argc, char* argv[]) {
         if (key.at(0) != '-') {
             continue;
         }
-        QString validKey = key.mid(1);
-        this->updateItemValue(validKey, arrs.at(1));
+        QString validKey = key.trimmed();
+        QString validValue = arrs.at(1).trimmed();
+        this->updateItemValue(validKey, validValue);
     }
     return m_command_lines.size();
 }
@@ -83,6 +84,10 @@ void CommandLine::print() {
 
 const char* CommandLine::getExeFileNameKey() {
     return "exeFileName";
+}
+
+const char* CommandLine::getStartViewKey() {
+    return "startView";
 }
 
 } // end namespace base
