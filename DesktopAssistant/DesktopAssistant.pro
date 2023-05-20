@@ -23,6 +23,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         app.cpp \
         base/buffer/buffer.cpp \
+        base/childProcess/child_process_app.cpp \
         base/childProcess/child_process_base.cpp \
         base/childProcess/default_child_process.cpp \
         base/exception/exception.cpp \
@@ -40,6 +41,7 @@ SOURCES += \
         base/tool/startup_base.cpp \
         core/factory/view_process_factory.cpp \
         core/message/default_message_handler.cpp \
+        core/process/viewProcessApp/view_process_app.cpp \
         core/process/view_process.cpp \
         core/service/child_view_service.cpp \
         core/startup/startup.cpp \
@@ -64,6 +66,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     app.h \
     base/buffer/buffer.h \
+    base/childProcess/child_process_app.h \
     base/childProcess/child_process_base.h \
     base/childProcess/default_child_process.h \
     base/define.h \
@@ -83,6 +86,7 @@ HEADERS += \
     base/tool/startup_base.h \
     core/factory/view_process_factory.h \
     core/message/default_message_handler.h \
+    core/process/viewProcessApp/view_process_app.h \
     core/process/view_process.h \
     core/service/child_view_service.h \
     core/startup/startup.h \

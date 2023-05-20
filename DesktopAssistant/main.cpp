@@ -7,7 +7,7 @@
 #include "base/log/log.h"
 #include "base/tool/command_line.h"
 
-#include "core/startup/startup.h"
+#include "core/process/viewProcessApp/view_process_app.h"
 
 
 // 系统托盘
@@ -21,7 +21,6 @@ using namespace SystemCursorDealSpace;
 App g_app; // 应用对象
 Manager g_manager; // 管理器对象
 base::CommandLine g_command_line; // 命令行参数
-core::Startup g_startup; // 启动器
 
 static QObject* AppSingleProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
     Q_UNUSED(engine)
@@ -53,7 +52,12 @@ int main(int argc, char *argv[])
         strValue = g_command_line.getItemValue(base::CommandLine::getStartViewKey());
         if (strValue.compare("on", Qt::CaseInsensitive) == 0) {
             // 子页面进程
-            ret = g_startup.startViewChildProcess(argc, argv);
+            core::ViewProcessApp app;
+            ret = app.init(argc, argv);
+            if (ret != 0) {
+                return ret;
+            }
+            ret = app.exec();
             return ret;
         }
     }
