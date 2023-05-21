@@ -8,17 +8,23 @@ LocalSocketClient::LocalSocketClient(QObject* parent) : QObject(parent), m_socke
 {
     m_socket = new QLocalSocket(this);
     if (m_socket) {
-        connect(m_socket, SIGNAL(connected()), this, SLOT(socketConnectedHandler()));
-        connect(m_socket, SIGNAL(disconnected()), this, SLOT(socketDisConnectedHandler()));
-        connect(m_socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(socketErrorHandler(QLocalSocket::LocalSocketError)));
+        connect(m_socket, SIGNAL(connected()), this, SLOT(onSocketConnected()));
+        connect(m_socket, SIGNAL(disconnected()), this, SLOT(onSocketDisConnected()));
+        connect(m_socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(onSocketError(QLocalSocket::LocalSocketError)));
+        connect(m_socket, SIGNAL(stateChanged(QLocalSocket::LocalSocketState)), this, SLOT(onStateChanged(QLocalSocket::LocalSocketState)));
+        connect(m_socket, SIGNAL(readyRead()), this, SLOT(onSocketReadyRead()));
+
     }
 }
 
 LocalSocketClient::~LocalSocketClient() {
     if (m_socket) {
-        disconnect(m_socket, SIGNAL(connected()), this, SLOT(socketConnectedHandler()));
-        disconnect(m_socket, SIGNAL(disconnected()), this, SLOT(socketDisConnectedHandler()));
-        disconnect(m_socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(socketErrorHandler(QLocalSocket::LocalSocketError)));
+        disconnect(m_socket, SIGNAL(connected()), this, SLOT(onSocketConnected()));
+        disconnect(m_socket, SIGNAL(disconnected()), this, SLOT(onSocketDisConnected()));
+        disconnect(m_socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(onSocketError(QLocalSocket::LocalSocketError)));
+        disconnect(m_socket, SIGNAL(stateChanged(QLocalSocket::LocalSocketState)), this, SLOT(onStateChanged(QLocalSocket::LocalSocketState)));
+        disconnect(m_socket, SIGNAL(readyRead()), this, SLOT(onSocketReadyRead()));
+
         if (m_socket->isOpen()) {
             m_socket->abort();
             m_socket->close();
@@ -46,36 +52,52 @@ void LocalSocketClient::endConnect() {
     }
 }
 
-QString LocalSocketClient::sendMessage(QString strMsg, int timeout) {
+int LocalSocketClient::sendMessage(QString strMsg, int timeout) {
     if (strMsg.isEmpty()) {
-        return QString("");
+        return -1;
     }
 
-    m_socket->write(strMsg.toStdString().c_str());
+    m_socket->write(strMsg.toUtf8().data(), strMsg.toUtf8().size());
     m_socket->flush();
 
-    if (!m_socket->bytesAvailable())
-        m_socket->waitForReadyRead(timeout);
+    bool bret = false;
+    if (!m_socket->bytesAvailable()) {
+        bret = m_socket->waitForReadyRead(timeout);
+    }
 
-    QTextStream stream(m_socket);
-    QString respond = stream.readAll();
+    return !bret ? 0 : strMsg.size();
+
+    //QTextStream stream(m_socket);
+    //QString respond = stream.readAll();
     //qDebug() << "Read Data From Server:" << respond;
-    return respond;
+    //return respond;
 }
 
-void LocalSocketClient::socketConnectedHandler() {
-
+void LocalSocketClient::onSocketConnected() {
+    emit socketConnected();
 }
 
-void LocalSocketClient::socketDisConnectedHandler() {
-
+void LocalSocketClient::onSocketDisConnected() {
+    emit socketDisConnected();
 }
 
-void LocalSocketClient::socketErrorHandler(QLocalSocket::LocalSocketError error) {
-    qInfo() << "LocalSocketClient::socketErrorHandler errno:" << error;
+void LocalSocketClient::onSocketError(QLocalSocket::LocalSocketError error) {
+    qInfo() << "LocalSocketClient::onSocketError errno:" << error;
+    emit socketExceptionError(error);
 }
 
-QString LocalSocketClient::sendActiveMessage() {
+void LocalSocketClient::onStateChanged(QLocalSocket::LocalSocketState socketState) {
+    emit socketStateChanged(socketState);
+}
+
+void LocalSocketClient::onSocketReadyRead() {
+    if (m_socket) {
+        QString strMsg = m_socket->readAll();
+        emit socketDataRecv(strMsg);
+    }
+}
+
+int LocalSocketClient::sendActiveMessage() {
     QString strMsg = "{\"code\":200,\"cmd\":\"active\"}";
     return this->sendMessage(strMsg, 10000);
 }

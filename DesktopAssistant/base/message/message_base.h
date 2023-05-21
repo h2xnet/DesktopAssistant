@@ -33,6 +33,8 @@ public:
 
     QString sender; // 发送者
     QString recver; // 接收者
+
+    int code; // 最后执行结果
 };
 
 } // end namespace base

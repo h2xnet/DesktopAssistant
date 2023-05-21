@@ -1,5 +1,7 @@
 #include "default_message_handler.h"
 
+#include "base/exception/error.h"
+
 
 namespace core {
 
@@ -29,7 +31,7 @@ bool DefaultMessageHandler::deserialize(const base::Buffer* pBuffer, base::Messa
 }
 
 int DefaultMessageHandler::process(base::MessageBase* pMsg) {
-    return 0;
+    return ERROR_CODE_OK;
 }
 
 } // end namespace core

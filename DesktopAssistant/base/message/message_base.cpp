@@ -7,7 +7,7 @@ qint32 MessageBase::getSequeCount() {
     return (sequeCount++);
 }
 
-MessageBase::MessageBase() : sequeNo(0), type(eMessageType::eEventType)
+MessageBase::MessageBase() : sequeNo(0), type(eMessageType::eEventType), code(0)
 {
     sequeNo = getSequeCount();
 }

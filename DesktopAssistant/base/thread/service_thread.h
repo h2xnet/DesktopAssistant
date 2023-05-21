@@ -7,6 +7,7 @@
 
 #include <QMutex>
 #include <QMutexLocker>
+#include <QList>
 
 namespace base {
 
@@ -14,6 +15,8 @@ class ServiceThread : public ThreadBase
 {
     Q_OBJECT
 public:
+    typedef QList<MessageBase*> MessageList;
+
     ServiceThread(base::MessageHandlerBase* pMsgHandler, QObject* parent = nullptr);
     virtual ~ServiceThread();
 
@@ -62,6 +65,7 @@ protected:
     virtual int onLoadTask() override;
     virtual int onLoadNextTask() override;
     virtual int onProcessWorkTask() override;
+    virtual int onRemoveCompletedTask() override;
 
 private:
     bool m_running;
@@ -71,6 +75,9 @@ private:
     QMutex m_mutex;
     MessageQueue m_task_queue; // 任务队列
     MessageQueue m_work_queue; // 当前工作队列
+
+    MessageList m_completed_list; // 任务执行完成列表
+    MessageList m_next_list; // 下一轮循环列表
 
     base::MessageHandlerBase* m_message_handler; // 消息处理器
 

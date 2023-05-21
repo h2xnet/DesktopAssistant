@@ -60,6 +60,14 @@ protected:
      */
     virtual int onProcessWorkTask() = 0;
 
+    /*
+     * Func: onRemoveCompletedTask
+     * Desc: 移除完成任务
+     * Author: zfs
+     * Date: 2023-05-21 08:39
+     */
+    virtual int onRemoveCompletedTask() = 0;
+
 };
 
 } // end namespace base

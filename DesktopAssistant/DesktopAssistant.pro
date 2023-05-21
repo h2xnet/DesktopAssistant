@@ -37,13 +37,16 @@ SOURCES += \
         base/message/message_queue.cpp \
         base/thread/service_thread.cpp \
         base/thread/thread_base.cpp \
-        base/tool/command_line.cpp \
-        base/tool/startup_base.cpp \
+        base/util/command_line.cpp \
+        base/util/startup_base.cpp \
+        base/util/tool_util.cpp \
         core/factory/view_process_factory.cpp \
         core/message/default_message_handler.cpp \
         core/process/viewProcessApp/view_process_app.cpp \
         core/process/view_process.cpp \
         core/service/child_view_service.cpp \
+        core/service/common/ipc_client_service.cpp \
+        core/service/common/ipc_server_service.cpp \
         core/startup/startup.cpp \
         main.cpp \
         manager.cpp \
@@ -82,13 +85,16 @@ HEADERS += \
     base/message/message_queue.h \
     base/thread/service_thread.h \
     base/thread/thread_base.h \
-    base/tool/command_line.h \
-    base/tool/startup_base.h \
+    base/util/command_line.h \
+    base/util/startup_base.h \
+    base/util/tool_util.h \
     core/factory/view_process_factory.h \
     core/message/default_message_handler.h \
     core/process/viewProcessApp/view_process_app.h \
     core/process/view_process.h \
     core/service/child_view_service.h \
+    core/service/common/ipc_client_service.h \
+    core/service/common/ipc_server_service.h \
     core/startup/startup.h \
     manager.h \
     third-part/systemTray/systemCursor/system_cursor_deal.h \

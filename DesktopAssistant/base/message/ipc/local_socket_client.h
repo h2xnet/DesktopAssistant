@@ -26,21 +26,48 @@ public:
     //
     // sendMessage : 发送消息
     //
-    QString sendMessage(QString strMsg, int timeout = 15000);
+    int sendMessage(QString strMsg, int timeout = 15000);
 
     //
     // sendActiveMessage : 发送激活消息
     //
-    QString sendActiveMessage();
+    int sendActiveMessage();
 
 public slots:
 
-    void socketConnectedHandler();
-    void socketDisConnectedHandler();
-    void socketErrorHandler(QLocalSocket::LocalSocketError error);
+    void onSocketConnected();
+    void onSocketDisConnected();
+    void onSocketError(QLocalSocket::LocalSocketError error);
+    void onStateChanged(QLocalSocket::LocalSocketState socketState);
+    void onSocketReadyRead();
 
 public:
 signals:
+
+    //
+    // socketConnected : 会话建议成功
+    //
+    void socketConnected();
+
+    //
+    // socketDisConnected : 会话已经断开
+    //
+    void socketDisConnected();
+
+    //
+    // socketDataRecv : 会话数据接收
+    //
+    void socketDataRecv(QString data);
+
+    //
+    // socketStateChanged : 会话状态改变
+    //
+    void socketStateChanged(int state);
+
+    //
+    // socketExceptionError : 会话发生错误
+    //
+    void socketExceptionError(int errorNo);
 
 private:
     QLocalSocket* m_socket;

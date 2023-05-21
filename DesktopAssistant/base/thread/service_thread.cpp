@@ -62,6 +62,9 @@ int ServiceThread::onWork() {
             this->onProcessWorkTask();
         }
 
+        // 移除已完成任务
+        this->onRemoveCompletedTask();
+
         if (isNeedDelay) {
             QThread::msleep(100);
         }
@@ -85,7 +88,15 @@ int ServiceThread::onLoadTask() {
 }
 
 int ServiceThread::onLoadNextTask() {
-    return 0;
+    int count = 0;
+    if (!m_next_list.isEmpty()) {
+        for(int i = 0; i < m_next_list.size(); i++) {
+            if (m_work_queue.addItem(m_next_list.at(i))) {
+                count++;
+            }
+        }
+    }
+    return count;
 }
 
 int ServiceThread::onProcessWorkTask() {
@@ -98,15 +109,42 @@ int ServiceThread::onProcessWorkTask() {
         pMsgNode = m_work_queue.getHeadItem(true);
         if (pMsgNode) {
             ret = m_message_handler->process(pMsgNode);
-            if (ret == ERROR_CODE_OK) {
-                count++;
+
+            // 保存执行结果
+            pMsgNode->code = ret;
+
+            if (ret == ERROR_CODE_NEXT) {
+                // 加载到下一轮
+                m_next_list.push_back(pMsgNode);
             }
             else {
+                // 执行完成，可能成功，也可能失败
+                m_completed_list.push_back(pMsgNode);
 
+                if (ret == ERROR_CODE_OK) {
+                    // 成功完成
+                    count++;
+                }
             }
         }
     }
 
+    return count;
+}
+
+int ServiceThread::onRemoveCompletedTask() {
+    int count = 0;
+    if (!m_completed_list.isEmpty()) {
+        base::MessageBase* pMsg = nullptr;
+        for(int i = 0; i < m_completed_list.size(); i++) {
+            pMsg = m_completed_list.at(i);
+            if (pMsg) {
+                delete pMsg;
+                pMsg = nullptr;
+            }
+        }
+        m_completed_list.clear();
+    }
     return count;
 }
 
