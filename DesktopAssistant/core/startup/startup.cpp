@@ -1,5 +1,6 @@
 #include "startup.h"
 
+#include "sdk/dasdk.h"
 
 namespace core {
 
@@ -12,9 +13,22 @@ Startup::~Startup() {
 
 }
 
-int Startup::startViewChildProcess(int argc, char* argv[]) {
-    int ret = -1;
-    return ret;
+QProcess* Startup::startViewChildProcess(int timeout, QObject* parent) {
+    QString strCmd = hxxda::getStartViewChildProcessCmd();
+    QStringList arguments = hxxda::getStartViewChildProcessArguments();
+
+    QProcess* process = new QProcess(parent);
+    if (process) {
+        process->start(strCmd, arguments);
+        if (timeout > 0) {
+            bool bret = process->waitForStarted(timeout);
+            if (!bret) {
+                process->deleteLater();
+                process = nullptr;
+            }
+        }
+    }
+    return process;
 }
 
 

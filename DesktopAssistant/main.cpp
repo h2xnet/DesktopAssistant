@@ -7,6 +7,7 @@
 #include "base/log/log.h"
 #include "base/util/command_line.h"
 
+#include "core/startup/startup.h"
 #include "core/process/viewProcessApp/view_process_app.h"
 
 
@@ -19,8 +20,14 @@
 using namespace SystemCursorDealSpace;
 
 App g_app; // 应用对象
-Manager g_manager; // 管理器对象
 base::CommandLine g_command_line; // 命令行参数
+core::Startup g_startup; // 启动器对象
+
+Manager g_manager; // 管理器对象
+
+App& getApp() {
+    return g_app;
+}
 
 static QObject* AppSingleProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
     Q_UNUSED(engine)

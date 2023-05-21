@@ -50,6 +50,7 @@ SOURCES += \
         core/startup/startup.cpp \
         main.cpp \
         manager.cpp \
+        sdk/dasdk.cpp \
         third-part/systemTray/systemCursor/system_cursor_deal.cpp \
         third-part/systemTray/systemTray/system_tray_icon.cpp
 
@@ -97,5 +98,6 @@ HEADERS += \
     core/service/common/ipc_server_service.h \
     core/startup/startup.h \
     manager.h \
+    sdk/dasdk.h \
     third-part/systemTray/systemCursor/system_cursor_deal.h \
     third-part/systemTray/systemTray/system_tray_icon.h

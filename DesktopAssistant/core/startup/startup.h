@@ -3,6 +3,9 @@
 
 #include "base/util/startup_base.h"
 
+#include <QObject>
+#include <QProcess>
+
 namespace core {
 
 /*
@@ -23,7 +26,7 @@ public:
      * Author: zfs
      * Date: 2023-05-20 07:34
      */
-    int startViewChildProcess(int argc, char* argv[]);
+    QProcess* startViewChildProcess(int timeout = 5000, QObject* parent = nullptr);
 
 };
 

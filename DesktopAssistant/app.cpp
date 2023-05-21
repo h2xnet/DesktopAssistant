@@ -2,6 +2,8 @@
 
 #include <QTextCodec>
 
+extern core::Startup g_startup; // 启动器对象
+
 App::App(QObject* parent) : QObject(parent)
 {
 
@@ -29,4 +31,8 @@ bool App::init() {
   #endif
 
     return true;
+}
+
+core::Startup* App::getStartup() {
+    return &g_startup;
 }
