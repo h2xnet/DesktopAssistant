@@ -9,6 +9,8 @@ namespace base {
 #define ERROR_CODE_NEXT 5   // 进入下一轮
 #define ERROR_CODE_FAIL 100   // 失败
 
+#define ERROR_CODE_DATA_OK  200 // 数据正确
+
 #define ERROR_CODE_PARAM_ERROR  -1  // 参数错误
 
 

@@ -45,6 +45,21 @@ int ServiceThread::addTask(int type, QString data, QString owner, QString sender
     return bret ? ERROR_CODE_OK : ERROR_CODE_TIMEOUT;
 }
 
+int ServiceThread::addTask(base::MessageBase* pMsg, int timeout) {
+    if (m_task_queue.getCount() >= m_max_task_count) {
+        return ERROR_CODE_NO_RESOURCE;
+    }
+    if (timeout <= 0) {
+        timeout = DEF_LOCK_TIMEOUT;
+    }
+    bool bret = false;
+    if (m_mutex.tryLock(timeout)) {
+        bret = m_task_queue.addItem(pMsg);
+        m_mutex.unlock();
+    }
+    return bret ? ERROR_CODE_OK : ERROR_CODE_TIMEOUT;
+}
+
 void ServiceThread::run() {
     int ret = onWork();
 }

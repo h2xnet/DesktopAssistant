@@ -1,6 +1,8 @@
 #include "tool_util.h"
 
 #include <QUuid>
+#include <QApplication>
+#include <QJsonDocument>
 
 namespace base {
 
@@ -23,5 +25,52 @@ QString ToolUtil::getUuid() {
     return strUuid;
 }
 
+//
+// getCurrentPID : 获取当前进程ID
+//
+QString ToolUtil::getCurrentPID() {
+    QString strPID = QString::number(QApplication::applicationPid());
+    return strPID;
+}
+
+QString ToolUtil::qjsonobjectToQstring(const QJsonObject& obj) {
+    return QString(QJsonDocument(obj).toJson(QJsonDocument::Compact));
+}
+
+QString ToolUtil::qjsonarrayToQstring(const QJsonArray& arr) {
+    return QString(QJsonDocument(arr).toJson(QJsonDocument::Compact));
+}
+
+QJsonObject ToolUtil::qstringToQjsonobject(const QString& str) {
+    QJsonObject obj;
+    QJsonDocument doc = QJsonDocument::fromJson(str.toUtf8());
+
+    // check validity of the document
+    if (!doc.isNull())
+    {
+        if(doc.isObject())
+        {
+            obj = doc.object();
+        }
+    }
+
+    return obj;
+}
+
+QJsonArray ToolUtil::qstringToQjsonarray(const QString& str) {
+    QJsonArray obj;
+    QJsonDocument doc = QJsonDocument::fromJson(str.toUtf8());
+
+    // check validity of the document
+    if(!doc.isNull())
+    {
+        if(doc.isArray())
+        {
+            obj = doc.array();
+        }
+    }
+
+    return obj;
+}
 
 } // end namespace base

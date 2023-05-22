@@ -42,6 +42,14 @@ public:
      */
     Q_INVOKABLE int addTask(int type, QString data, QString owner, QString sender, QString reciver, int timeout = DEF_LOCK_TIMEOUT);
 
+    /*
+     * Func: addTask
+     * Desc: 添加新任务
+     * Author: zfs
+     * Date: 2023-05-25 07:05
+     */
+    int addTask(base::MessageBase* pMsg, int timeout = DEF_LOCK_TIMEOUT);
+
 
 public slots:
 

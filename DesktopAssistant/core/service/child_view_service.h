@@ -57,6 +57,14 @@ public:
     ChildViewService(QObject* parent = nullptr);
     virtual ~ChildViewService();
 
+    //
+    // core::DefaultMessageHandler
+    //
+    virtual int write(const base::MessageBase* pMsg) override;
+    //virtual int read(base::MessageBase* pMsg) override;
+    virtual int process(base::MessageBase* pMsg) override;
+
+
     /*
      * Func: addView
      * Desc: 添加一个页面
@@ -64,16 +72,9 @@ public:
      * Date: 2023-05-21 16:19
      * @title: 页面标题
      * @owner: 页面参数，允许添加一个页面自定义参数
-     * 返回值：返回viewId
+     * 返回值：成功返回0
      */
-    Q_INVOKABLE QString addView(QString title, QString owner);
-
-    //
-    // core::DefaultMessageHandler
-    //
-    virtual int write(const base::MessageBase* pMsg) override;
-    virtual int read(base::MessageBase* pMsg) override;
-    virtual int process(base::MessageBase* pMsg) override;
+    Q_INVOKABLE int addView(QString title, QString owner);
 
 public slots:
 

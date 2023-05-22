@@ -41,6 +41,7 @@ SOURCES += \
         base/util/startup_base.cpp \
         base/util/tool_util.cpp \
         core/factory/view_process_factory.cpp \
+        core/message/child_view_message.cpp \
         core/message/default_message_handler.cpp \
         core/process/viewProcessApp/view_process_app.cpp \
         core/process/view_process.cpp \
@@ -90,6 +91,7 @@ HEADERS += \
     base/util/startup_base.h \
     base/util/tool_util.h \
     core/factory/view_process_factory.h \
+    core/message/child_view_message.h \
     core/message/default_message_handler.h \
     core/process/viewProcessApp/view_process_app.h \
     core/process/view_process.h \

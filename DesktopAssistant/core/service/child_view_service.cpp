@@ -1,9 +1,12 @@
 #include "child_view_service.h"
 
-//#include "core/startup/startup.h"
+#include "base/exception/error.h"
+#include "core/message/child_view_message.h"
 #include "app.h"
 
 #include <QDateTime>
+#include <QJsonObject>
+#include <QJsonArray>
 
 namespace core {
 
@@ -86,20 +89,34 @@ int ChildViewService::write(const base::MessageBase* pMsg) {
     return 0;
 }
 
-int ChildViewService::read(base::MessageBase* pMsg) {
-    return 0;
-}
+//int ChildViewService::read(base::MessageBase* pMsg) {
+//    return 0;
+//}
 
 int ChildViewService::process(base::MessageBase* pMsg) {
     return 0;
 }
 
-QString ChildViewService::addView(QString title, QString owner) {
+int ChildViewService::addView(QString title, QString owner) {
     if (title.isEmpty()) {
         title = "新标签页";
     }
 
-    int timeout = 5000;
+    // 创建子页面请求消息
+    ChildViewMessage* pMsg = new ChildViewMessage();
+    if (pMsg) {
+        pMsg->type = pMsg->getRequestTypeValue(ChildViewMessage::ChildViewMessageType::eAddViewTypeIndex);
+        pMsg->owner = QString("%1").arg(owner);
+
+        QJsonObject dataObj;
+        dataObj.insert("title", title);
+
+        pMsg->data = QString("%1").arg(base::MessageBase::buildMessage(ERROR_CODE_DATA_OK, "ok", dataObj));
+    }
+
+    return this->addTask(pMsg);
+
+    /*int timeout = 5000;
     // 启动页面子进程
     QProcess* process = getApp().getStartup()->startViewChildProcess(timeout);
     if (!process) {
@@ -122,7 +139,7 @@ QString ChildViewService::addView(QString title, QString owner) {
         return QString("");
     }
 
-    return viewId;
+    return viewId;*/
 }
 
 bool ChildViewService::onAddSession(QProcess* process, const QString& title, const QString& owner) {
