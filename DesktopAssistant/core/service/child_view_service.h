@@ -7,6 +7,8 @@
 
 #include <QMap>
 #include <QProcess>
+#include <QJsonObject>
+#include <QJsonArray>
 
 #include <QMutex>
 #include <QMutexLocker>
@@ -54,6 +56,15 @@ public:
     // typedef QMap<sessionId, viewId>
     typedef QMap<QString, QString> SessionToViewMap;
 
+    //
+    // qml使用消息定义
+    //
+    Q_ENUMS(ChildViewMessageType)
+    enum ChildViewMessageType {
+        eAddViewRequest = CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST, // 添加子页面请求
+        eAddViewResponse = CHILD_VIEW_MESSAGE_ADD_VIEW_RESPONSE // 添加子页面应答
+    };
+
     ChildViewService(QObject* parent = nullptr);
     virtual ~ChildViewService();
 
@@ -91,7 +102,11 @@ public slots:
 public:
 signals:
 
-    //void clientView
+    //
+    // childViewResponseEvent : 页面统一应答事件
+    //
+    void childViewSimpleResponseEvent(int type, int status, QString msg, QString owner = "");
+    void childViewResponseEvent(int type, int status, const QJsonObject& obj, QString owner = "");
 
 protected:
 
@@ -111,6 +126,11 @@ private:
     // onModifySession : 修改会话信息
     //
     bool onModifySession(const QString& viewId, const QString& strSessionId);
+
+    //
+    // onProcessAddView : 处理添加子页面任务
+    //
+    int onProcessAddView(base::MessageBase* pMsg);
 
     // IPC 服务端对象
     core::IPCServerService* m_ipc_server;

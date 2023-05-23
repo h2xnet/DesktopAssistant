@@ -1,12 +1,15 @@
 #include "child_view_service.h"
 
-#include "base/exception/error.h"
-#include "core/message/child_view_message.h"
 #include "app.h"
+#include "base/exception/error.h"
+#include "base/util/tool_util.h"
+#include "core/message/child_view_message.h"
 
 #include <QDateTime>
 #include <QJsonObject>
 #include <QJsonArray>
+
+using namespace base;
 
 namespace core {
 
@@ -85,63 +88,6 @@ void ChildViewService::onClientSocketExceptionErrorHandler(QString strSessionId,
 
 }
 
-int ChildViewService::write(const base::MessageBase* pMsg) {
-    return 0;
-}
-
-//int ChildViewService::read(base::MessageBase* pMsg) {
-//    return 0;
-//}
-
-int ChildViewService::process(base::MessageBase* pMsg) {
-    return 0;
-}
-
-int ChildViewService::addView(QString title, QString owner) {
-    if (title.isEmpty()) {
-        title = "新标签页";
-    }
-
-    // 创建子页面请求消息
-    ChildViewMessage* pMsg = new ChildViewMessage();
-    if (pMsg) {
-        pMsg->type = pMsg->getRequestTypeValue(ChildViewMessage::ChildViewMessageType::eAddViewTypeIndex);
-        pMsg->owner = QString("%1").arg(owner);
-
-        QJsonObject dataObj;
-        dataObj.insert("title", title);
-
-        pMsg->data = QString("%1").arg(base::MessageBase::buildMessage(ERROR_CODE_DATA_OK, "ok", dataObj));
-    }
-
-    return this->addTask(pMsg);
-
-    /*int timeout = 5000;
-    // 启动页面子进程
-    QProcess* process = getApp().getStartup()->startViewChildProcess(timeout);
-    if (!process) {
-        // 启动失败
-        qInfo() << "ChildViewService::addView startViewChildProcess fail, title:" << title;
-        delete process;
-        process = nullptr;
-        return QString("");
-    }
-
-    // start方式启动的时间才有效
-    QString viewId = QString::number(process->processId());
-
-    // 保存会话信息
-    if (!this->onAddSession(process, title, owner)) {
-        qInfo() << "ChildViewService::addView onAddSession fail, title:" << title;
-        // 关闭进程
-        process->close();
-        process->deleteLater();
-        return QString("");
-    }
-
-    return viewId;*/
-}
-
 bool ChildViewService::onAddSession(QProcess* process, const QString& title, const QString& owner) {
     if (!process) {
         return false;
@@ -204,6 +150,118 @@ bool ChildViewService::onModifySession(const QString& viewId, const QString& str
     }
     return false;
 }
+
+int ChildViewService::write(const base::MessageBase* pMsg) {
+    return 0;
+}
+
+//int ChildViewService::read(base::MessageBase* pMsg) {
+//    return 0;
+//}
+
+int ChildViewService::process(base::MessageBase* pMsg) {
+    if (!pMsg) {
+        return ERROR_CODE_PARAM_ERROR;
+    }
+    int status = ERROR_CODE_FAIL;
+    int ret = ERROR_CODE_OK;
+    switch (pMsg->type) {
+    case CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST: {
+        // 添加页面请求
+        status = this->onProcessAddView(pMsg);
+        ret = ERROR_CODE_OK;
+    }break;
+    default: {
+        ret = ERROR_CODE_OK;
+    }break;
+    }
+    return ret;
+}
+
+int ChildViewService::addView(QString title, QString owner) {
+    if (title.isEmpty()) {
+        title = "新标签页";
+    }
+
+    // 创建子页面请求消息
+    ChildViewMessage* pMsg = new ChildViewMessage();
+    if (pMsg) {
+        pMsg->type = CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST;
+        pMsg->owner = QString("%1").arg(owner);
+
+        QJsonObject dataObj;
+        dataObj.insert("title", title);
+
+        pMsg->data = QString("%1").arg(base::MessageBase::buildMessage(ERROR_CODE_DATA_OK, "ok", dataObj));
+    }
+
+    return this->addTask(pMsg);
+}
+
+int ChildViewService::onProcessAddView(base::MessageBase* pMsg) {
+    if (pMsg->type != CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST) {
+        return ERROR_CODE_PARAM_ERROR;
+    }
+
+    int ret = ERROR_CODE_FAIL;
+    QString strTitle("");
+    QString strViewId("");
+
+    QJsonObject obj = base::ToolUtil::qstringToQjsonobject(pMsg->data);
+    if (obj.contains("code")) {
+        int code = obj.value("code").toInt();
+        if (code == ERROR_CODE_DATA_OK) {
+            QJsonObject dataObj = obj.value("data").toObject();
+            if (dataObj.contains("title")) {
+                strTitle = dataObj.value("title").toString();
+            }
+        }
+    }
+
+    qDebug() << "ChildViewService::onProcessAddView params, title:" << strTitle \
+             << ", owner:" << pMsg->owner;
+
+    int timeout = 5000;
+
+    // 启动页面子进程
+    QProcess* process = getApp().getStartup()->startViewChildProcess(timeout);
+    if (process) {
+        strViewId = QString::number(process->processId());
+        if (this->onAddSession(process, strTitle, pMsg->owner)) {
+            ret = ERROR_CODE_OK;
+        }
+    }
+
+    QJsonObject replayObj;
+    if (ret == ERROR_CODE_OK) {
+        // 成功
+        replayObj.insert("code", ERROR_CODE_DATA_OK);
+        replayObj.insert("msg", "成功");
+
+        QJsonObject dataObj;
+        dataObj.insert("viewId", strViewId);
+        dataObj.insert("viewTitle", strTitle);
+
+        replayObj.insert("data", dataObj);
+    }
+    else {
+        // 失败
+        if (process) {
+            process->close();
+            process->deleteLater();
+        }
+        if (!strViewId.isEmpty()) {
+            strViewId = "";
+        }
+
+        replayObj.insert("code", ERROR_CODE_FAIL);
+        replayObj.insert("msg", "失败");
+    }
+
+    emit childViewResponseEvent(CHILD_VIEW_MESSAGE_ADD_VIEW_RESPONSE, ret, replayObj, pMsg->owner);
+
+}
+
 
 
 } // end namespace core

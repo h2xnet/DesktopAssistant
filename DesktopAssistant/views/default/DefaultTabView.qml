@@ -5,6 +5,8 @@ import QtQuick.Controls.Styles 1.4
 
 import "../../hxxui/tab"
 
+import desktopAssistant.net.pc 1.0
+
 Rectangle {
     id: controlId
 
@@ -35,6 +37,11 @@ Rectangle {
 
     Component.onCompleted: {
         console.info("DefaultTableView.qml Component.onCompleted!");
+
+        // 子页面服务事件绑定
+        childViewServiceId.childViewSimpleResponseEvent.connect(onChildViewSimpleResponseEvent);
+        childViewServiceId.childViewResponseEvent.connect(onChildViewResponseEvent);
+
 
         // test add tab pages
         let tabPageUrl1 = "qrc:/views/default/tabpages/DefaultTabPage.qml";
@@ -82,6 +89,54 @@ Rectangle {
 
     Component.onDestruction: {
         console.info("DefaultTableView.qml Component.onDestruction!");
+
+        // 取消子页面服务事件绑定
+        childViewServiceId.childViewSimpleResponseEvent.disconnect(onChildViewSimpleResponseEvent);
+        childViewServiceId.childViewResponseEvent.disconnect(onChildViewResponseEvent);
+
+
+        // 初始化页面
+        onViewInit();
+
+    }
+
+    //
+    // onViewInit : 页面初始化
+    //
+    function onViewInit() {
+        console.log("DefaultTableView.qml");
+
+        //console.info("enum test: " + childViewServiceId.ChildViewMessageType.eAddViewResponse);
+
+    }
+
+    //
+    // onChildViewSimpleResponseEvent : 子页面简单事件
+    // @type: 事件类型
+    // @status: 处理结果状态值，0代表成功，其它代表失败
+    // @msg: 事件处理结果对应消息
+    // @owner: 用户请求自定义参数
+    //
+    function onChildViewSimpleResponseEvent(type, status, msg, owner) {
+        let paramsObj = {};
+        paramsObj["type"] = type;
+        paramsObj["status"] = status;
+        paramsObj["msg"] = msg;
+        paramsObj["owner"] = owner;
+        console.log("DefaultTabView.qml onChildViewSimpleResponseEvent params: " + JSON.stringify(paramsObj));
+
+    }
+
+    //
+    // onChildViewResponseEvent : 子页面事件
+    //
+    function onChildViewResponseEvent(type, status, obj, owner) {
+        let paramsObj = {};
+        paramsObj["type"] = type;
+        paramsObj["status"] = status;
+        paramsObj["obj"] = obj;
+        paramsObj["owner"] = owner;
+        console.log("DefaultTabView.qml onChildViewResponseEvent params: " + JSON.stringify(paramsObj));
 
     }
 

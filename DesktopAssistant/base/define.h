@@ -9,13 +9,7 @@ namespace base  {
 #define DEF_LOCAL_SOCKET_SERVER_NAME "DesktopAssistantDefLocalSocketServerName"
 #endif
 
-//
-// MESSAGE_PAIR_ : 消息对结构
-//
-typedef struct MESSAGE_PAIR_ {
-    int requestType; // 请求消息类型值
-    int responseType; // 应答消息类型值
-} MESSAGE_PAIR, *LPMESSAGE_PAIR;
+
 
 //
 // 消息分段信息
@@ -60,6 +54,13 @@ typedef struct MESSAGE_PAIR_ {
 #define USER_MESSAGE_TYPE   50000
 #endif
 
+//
+// 子进程页面消息映射列表
+//
+
+// 添加子页面消息
+#define CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST     (CHILD_VIEW_MESSAGE_START_TYPE + 0)
+#define CHILD_VIEW_MESSAGE_ADD_VIEW_RESPONSE    (CHILD_VIEW_MESSAGE_START_TYPE + 1)
 
 } // end namespace base
 

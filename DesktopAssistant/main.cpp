@@ -10,6 +10,8 @@
 #include "core/startup/startup.h"
 #include "core/process/viewProcessApp/view_process_app.h"
 
+#include "core/service/child_view_service.h"
+
 
 // 系统托盘
 #include "third-part/systemTray/systemCursor/system_cursor_deal.h"
@@ -25,22 +27,32 @@ core::Startup g_startup; // 启动器对象
 
 Manager g_manager; // 管理器对象
 
+// 服务对象列表
+core::ChildViewService g_child_view_service; // 子页面服务对象
+
 App& getApp() {
     return g_app;
 }
 
-static QObject* AppSingleProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
+static QObject* AppSingleProvider(QQmlEngine* engine, QJSEngine* scriptEngine) {
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
 
     return &g_app;
 }
 
-static QObject* ManagerSingleProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
+static QObject* ManagerSingleProvider(QQmlEngine* engine, QJSEngine* scriptEngine) {
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
 
     return &g_manager;
+}
+
+static QObject* ChildViewServiceSingleProvider(QQmlEngine* engine, QJSEngine* scriptEngine) {
+    Q_UNUSED(engine);
+    Q_UNUSED(scriptEngine);
+
+    return &g_child_view_service;
 }
 
 
@@ -88,9 +100,11 @@ int main(int argc, char *argv[])
     qInfo() << "程序管理器初始化结果:" << ret;
 
     // 单列全局对象
-    qmlRegisterSingletonType<App>("desktopAssistant.net.pc", 1, 0, "AppId", AppSingleProvider);  // 注册应用类型
-    qmlRegisterSingletonType<Manager>("desktopAssistant.net.pc", 1, 0, "ManagerId", ManagerSingleProvider);  // 注册管理类型
+    qmlRegisterSingletonType<App>("desktopAssistant.net.pc", 1, 0, "appId", AppSingleProvider);  // 注册应用类型
+    qmlRegisterSingletonType<Manager>("desktopAssistant.net.pc", 1, 0, "managerId", ManagerSingleProvider);  // 注册管理类型
 
+    // 服务对象
+    qmlRegisterSingletonType<core::ChildViewService>("desktopAssistant.net.pc", 1, 0, "childViewServiceId", ChildViewServiceSingleProvider);
 
     // 系统托盘
     qmlRegisterType<MyMenu>("desktopAssistant.net.pc", 1, 0, "MyMenu");

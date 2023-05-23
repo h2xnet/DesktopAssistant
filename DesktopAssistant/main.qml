@@ -202,6 +202,7 @@ Window {
     Component.onDestruction: {
         console.info("main.qml Component.onDestruction!");
 
+
     }
 
     //
