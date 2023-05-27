@@ -9,7 +9,7 @@ namespace core {
 
 /*
  * ClassName: IPCServerService
- * Desc: 进程间通信服务类
+ * Desc: 进程间通信服务类，提供服务线程
  * Author: zfs
  * Date: 2023-05-21 08:24
  */
@@ -17,7 +17,7 @@ class IPCServerService : public base::ServiceThread, public core::DefaultMessage
 {
     Q_OBJECT
 public:
-    IPCServerService();
+    IPCServerService(QObject* parent = nullptr);
     virtual ~IPCServerService();
 
     /*

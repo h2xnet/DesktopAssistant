@@ -2,8 +2,8 @@
 #define CHILD_PROCESS_SERVICE_H
 
 #include "base/thread/service_thread.h"
+#include "base/message/ipc/local_socket_server.h"
 #include "core/message/default_message_handler.h"
-#include "core/service/common/ipc_server_service.h"
 
 #include <QMap>
 #include <QProcess>
@@ -75,6 +75,7 @@ public:
     //virtual int read(base::MessageBase* pMsg) override;
     virtual int process(base::MessageBase* pMsg) override;
 
+    Q_INVOKABLE int beginRun(QString ipcServerName);
 
     /*
      * Func: addView
@@ -90,13 +91,13 @@ public:
 public slots:
 
     //
-    // core::IPCServerService
+    // 客户IPC会话事件
     //
-    void onClientSocketConnectedHandler(QString strSessionId);
-    void onClientSocketDisConnectedHandler(QString strSessionId);
-    void onClientSocketDataRecvHandler(QString strSessionId, QString data);
-    void onClientSocketStateChangedHandler(QString strSessionId, int state);
-    void onClientSocketExceptionErrorHandler(QString strSessionId, int errorNo);
+    void onClientSocketConnected(QString strSessionId);
+    void onClientSocketDisConnected(QString strSessionId);
+    void onClientSocketDataRecv(QString strSessionId, QString data);
+    void onClientSocketStateChanged(QString strSessionId, int state);
+    void onClientSocketExceptionError(QString strSessionId, int errorNo);
 
 
 public:
@@ -133,7 +134,7 @@ private:
     int onProcessAddView(base::MessageBase* pMsg);
 
     // IPC 服务端对象
-    core::IPCServerService* m_ipc_server;
+    base::LocalSocketServer* m_ipc_server;
 
     // 页面会话信息
     ViewSessionMap m_session_map;

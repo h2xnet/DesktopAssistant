@@ -39,8 +39,11 @@ Rectangle {
         console.info("DefaultTableView.qml Component.onCompleted!");
 
         // 子页面服务事件绑定
-        childViewServiceId.childViewSimpleResponseEvent.connect(onChildViewSimpleResponseEvent);
-        childViewServiceId.childViewResponseEvent.connect(onChildViewResponseEvent);
+        ChildViewServiceId.childViewSimpleResponseEvent.connect(onChildViewSimpleResponseEvent);
+        //ChildViewServiceId.childViewResponseEvent.connect(onChildViewResponseEvent);
+
+        // 初始化页面
+        onViewInit();
 
 
         // test add tab pages
@@ -91,12 +94,10 @@ Rectangle {
         console.info("DefaultTableView.qml Component.onDestruction!");
 
         // 取消子页面服务事件绑定
-        childViewServiceId.childViewSimpleResponseEvent.disconnect(onChildViewSimpleResponseEvent);
-        childViewServiceId.childViewResponseEvent.disconnect(onChildViewResponseEvent);
+        //ChildViewServiceId.childViewSimpleResponseEvent.disconnect(onChildViewSimpleResponseEvent);
+        //ChildViewServiceId.childViewResponseEvent.disconnect(onChildViewResponseEvent);
 
 
-        // 初始化页面
-        onViewInit();
 
     }
 

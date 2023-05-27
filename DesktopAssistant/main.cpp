@@ -10,7 +10,6 @@
 #include "core/startup/startup.h"
 #include "core/process/viewProcessApp/view_process_app.h"
 
-#include "core/service/child_view_service.h"
 
 
 // 系统托盘
@@ -26,9 +25,6 @@ base::CommandLine g_command_line; // 命令行参数
 core::Startup g_startup; // 启动器对象
 
 Manager g_manager; // 管理器对象
-
-// 服务对象列表
-core::ChildViewService g_child_view_service; // 子页面服务对象
 
 App& getApp() {
     return g_app;
@@ -48,12 +44,6 @@ static QObject* ManagerSingleProvider(QQmlEngine* engine, QJSEngine* scriptEngin
     return &g_manager;
 }
 
-static QObject* ChildViewServiceSingleProvider(QQmlEngine* engine, QJSEngine* scriptEngine) {
-    Q_UNUSED(engine);
-    Q_UNUSED(scriptEngine);
-
-    return &g_child_view_service;
-}
 
 
 int main(int argc, char *argv[])
@@ -99,12 +89,10 @@ int main(int argc, char *argv[])
     ret = g_manager.init(argc, argv);
     qInfo() << "程序管理器初始化结果:" << ret;
 
+    // 备注：qmlName类型名必须以大写字母开关
     // 单列全局对象
-    qmlRegisterSingletonType<App>("desktopAssistant.net.pc", 1, 0, "appId", AppSingleProvider);  // 注册应用类型
-    qmlRegisterSingletonType<Manager>("desktopAssistant.net.pc", 1, 0, "managerId", ManagerSingleProvider);  // 注册管理类型
-
-    // 服务对象
-    qmlRegisterSingletonType<core::ChildViewService>("desktopAssistant.net.pc", 1, 0, "childViewServiceId", ChildViewServiceSingleProvider);
+    qmlRegisterSingletonType<App>("desktopAssistant.net.pc", 1, 0, "AppId", AppSingleProvider);  // 注册应用类型
+    qmlRegisterSingletonType<Manager>("desktopAssistant.net.pc", 1, 0, "ManagerId", ManagerSingleProvider);  // 注册管理类型
 
     // 系统托盘
     qmlRegisterType<MyMenu>("desktopAssistant.net.pc", 1, 0, "MyMenu");
@@ -117,10 +105,19 @@ int main(int argc, char *argv[])
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
-        if (!obj && url == objUrl)
+        if (!obj && url == objUrl) {
+            //qInfo() << "主程序启动失败将被迫退出";
+            qInfo() << "main start fail, exit";
             QCoreApplication::exit(-1);
+        }
     }, Qt::QueuedConnection);
     engine.load(url);
 
-    return app.exec();
+    ret = app.exec();
+
+    qInfo() << "主程序退出，退出代码为:" << ret;
+
+    base::Log::uninit();
+
+    return ret;
 }

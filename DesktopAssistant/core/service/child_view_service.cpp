@@ -16,25 +16,13 @@ namespace core {
 ChildViewService::ChildViewService(QObject* parent) : base::ServiceThread(this, parent), m_ipc_server(nullptr)
 {
     // IPC
-    m_ipc_server = new IPCServerService();
+    m_ipc_server = new base::LocalSocketServer(this);
     if (m_ipc_server) {
-
-        connect(m_ipc_server, SIGNAL(clientSocketConnectedHandler(QString)),
-                this, SLOT(onClientSocketConnectedHandler(QString)));
-
-        connect(m_ipc_server, SIGNAL(clientSocketDisConnectedHandler(QString)),
-                this, SLOT(onClientSocketDisConnectedHandler(QString)));
-
-        connect(m_ipc_server, SIGNAL(clientSocketDataRecvHandler(QString, QString)),
-                this, SLOT(onClientSocketDataRecvHandler(QString, QString)));
-
-        connect(m_ipc_server, SIGNAL(clientSocketStateChangedHandler(QString, int)),
-                this, SLOT(onClientSocketStateChangedHandler(QString, int)));
-
-        connect(m_ipc_server, SIGNAL(clientSocketExceptionErrorHandler(QString, int)),
-                this, SLOT(onClientSocketExceptionErrorHandler(QString, int)));
-
-
+        connect(m_ipc_server, SIGNAL(socketConnected(QString)), this, SLOT(onClientSocketConnected(QString)));
+        connect(m_ipc_server, SIGNAL(socketDisConnected(QString)), this, SLOT(onClientSocketDisConnected(QString)));
+        connect(m_ipc_server, SIGNAL(socketDataRecv(QString, QString)), this, SLOT(onClientSocketDataRecv(QString, QString)));
+        connect(m_ipc_server, SIGNAL(socketStateChanged(QString, int)), this, SLOT(onClientSocketStateChanged(QString, int)));
+        connect(m_ipc_server, SIGNAL(socketExceptionError(QString, int)), this, SLOT(onClientSocketExceptionError(QString, int)));
     }
 
 }
@@ -42,49 +30,39 @@ ChildViewService::ChildViewService(QObject* parent) : base::ServiceThread(this, 
 ChildViewService::~ChildViewService() {
 
     if (m_ipc_server) {
-        disconnect(m_ipc_server, SIGNAL(clientSocketConnectedHandler(QString)),
-                this, SLOT(onClientSocketConnectedHandler(QString)));
+        disconnect(m_ipc_server, SIGNAL(socketConnected(QString)), this, SLOT(onClientSocketConnected(QString)));
+        disconnect(m_ipc_server, SIGNAL(socketDisConnected(QString)), this, SLOT(onClientSocketDisConnected(QString)));
+        disconnect(m_ipc_server, SIGNAL(socketDataRecv(QString, QString)), this, SLOT(onClientSocketDataRecv(QString, QString)));
+        disconnect(m_ipc_server, SIGNAL(socketStateChanged(QString, int)), this, SLOT(onClientSocketStateChanged(QString, int)));
+        disconnect(m_ipc_server, SIGNAL(socketExceptionError(QString, int)), this, SLOT(onClientSocketExceptionError(QString, int)));
 
-        disconnect(m_ipc_server, SIGNAL(clientSocketDisConnectedHandler(QString)),
-                this, SLOT(onClientSocketDisConnectedHandler(QString)));
-
-        disconnect(m_ipc_server, SIGNAL(clientSocketDataRecvHandler(QString, QString)),
-                this, SLOT(onClientSocketDataRecvHandler(QString, QString)));
-
-        disconnect(m_ipc_server, SIGNAL(clientSocketStateChangedHandler(QString, int)),
-                this, SLOT(onClientSocketStateChangedHandler(QString, int)));
-
-        disconnect(m_ipc_server, SIGNAL(clientSocketExceptionErrorHandler(QString, int)),
-                this, SLOT(onClientSocketExceptionErrorHandler(QString, int)));
-
-        delete m_ipc_server;
-        m_ipc_server = nullptr;
+        m_ipc_server->deleteLater();
     }
 
 }
 
-void ChildViewService::onClientSocketConnectedHandler(QString strSessionId) {
-    qDebug() << "ChildViewService::onClientSocketConnectedHandler sessionId:" << strSessionId;
+void ChildViewService::onClientSocketConnected(QString strSessionId) {
+    qDebug() << "ChildViewService::onClientSocketConnected sessionId:" << strSessionId;
 
 }
 
-void ChildViewService::onClientSocketDisConnectedHandler(QString strSessionId) {
+void ChildViewService::onClientSocketDisConnected(QString strSessionId) {
     bool bret = this->onRemoveSession(strSessionId);
-    qDebug() << "ChildViewService::onClientSocketDisConnectedHandler sessionId:" << strSessionId    \
+    qDebug() << "ChildViewService::onClientSocketDisConnected sessionId:" << strSessionId    \
              << ", onRemoveSession status:" << bret;
 
 }
 
-void ChildViewService::onClientSocketDataRecvHandler(QString strSessionId, QString data) {
+void ChildViewService::onClientSocketDataRecv(QString strSessionId, QString data) {
     // 解析接收到的IPC数据，以消息的方式放入处理队列
 
 }
 
-void ChildViewService::onClientSocketStateChangedHandler(QString strSessionId, int state) {
+void ChildViewService::onClientSocketStateChanged(QString strSessionId, int state) {
 
 }
 
-void ChildViewService::onClientSocketExceptionErrorHandler(QString strSessionId, int errorNo) {
+void ChildViewService::onClientSocketExceptionError(QString strSessionId, int errorNo) {
 
 }
 
@@ -175,6 +153,37 @@ int ChildViewService::process(base::MessageBase* pMsg) {
         ret = ERROR_CODE_OK;
     }break;
     }
+    return ret;
+}
+
+int ChildViewService::beginRun(QString ipcServerName) {
+    if (ipcServerName.isEmpty()) {
+        ipcServerName = CHILD_VIEW_SERVICE_SERVER_NAME;
+    }
+
+    if (!m_ipc_server) {
+        qInfo() << "ChildViewService::beginRun ipc server object pointer isNull";
+        return -2;
+    }
+
+    int ret = -1;
+
+    try {
+        ret = m_ipc_server->beginRun(ipcServerName);
+        qInfo() << "ChildViewService::beginRun ipc server beginRun status:" << ret;
+
+        if (ret != 0) {
+            return ret;
+        }
+
+        this->start();
+        ret = 0;
+    }
+    catch(...) {
+        qInfo() << "ChildViewService::beginRun exception";
+        ret = -3;
+    }
+
     return ret;
 }
 

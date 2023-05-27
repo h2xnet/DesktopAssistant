@@ -3,7 +3,7 @@
 
 namespace core {
 
-IPCServerService::IPCServerService() : base::ServiceThread(this, this), m_ipc_server(nullptr)
+IPCServerService::IPCServerService(QObject* parent) : base::ServiceThread(this, parent), m_ipc_server(nullptr)
 {
     m_ipc_server = new base::LocalSocketServer(this);
     if (m_ipc_server) {

@@ -12,8 +12,9 @@ Popup {
 
     closePolicy: Popup.CloseOnPressOutside
 
-    x: parent.right
-    y: parent.top
+    x: parent.width
+    y: 0
+
     width: 200
     height: 220
 

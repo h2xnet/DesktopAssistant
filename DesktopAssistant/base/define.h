@@ -9,6 +9,9 @@ namespace base  {
 #define DEF_LOCAL_SOCKET_SERVER_NAME "DesktopAssistantDefLocalSocketServerName"
 #endif
 
+#ifndef CHILD_VIEW_SERVICE_SERVER_NAME
+#define CHILD_VIEW_SERVICE_SERVER_NAME "DesktopAssistantChildViewServiceServerName"
+#endif
 
 
 //
