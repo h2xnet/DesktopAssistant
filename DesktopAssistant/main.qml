@@ -192,7 +192,7 @@ Window {
 
         // 初始化界面
         let pageUrl = "qrc:/views/default/DefaultTabView.qml"
-        tableStackViewId.push(pageUrl, {parentControl: mainWndId});
+        tableStackViewId.push(pageUrl, {mainWndObject: mainWndId});
 
         // 初始化应用
         onInitAppEvent();

@@ -47,6 +47,8 @@ Rectangle {
     }
 
     MouseArea {
+        id: mouseAreaId
+
         anchors.fill: parent
 
         hoverEnabled: true

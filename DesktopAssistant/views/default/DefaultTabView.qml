@@ -7,10 +7,12 @@ import "../../hxxui/tab"
 
 import desktopAssistant.net.pc 1.0
 
+import "../../js/view/ViewEvent.js" as ViewEvent;
+
 Rectangle {
     id: controlId
 
-    property var parentControl: null
+    property var mainWndObject: null
 
     property int tabBarHeight: 30
     property int tabBarBtnLeftPadding: 15
@@ -24,6 +26,22 @@ Rectangle {
 
     color: backgroudColor
     radius: borderRadius
+
+    //
+    // 启动定时器，延迟启动
+    //
+    Timer {
+        id: startupTimerId
+
+        repeat: false
+        interval: 3000
+        onTriggered: {
+            onStartupEvent();
+            if (startupTimerId.running) {
+                startupTimerId.stop();
+            }
+        }
+    }
 
     // tab
     TabPageView {
@@ -40,13 +58,13 @@ Rectangle {
 
         // 子页面服务事件绑定
         ChildViewServiceId.childViewSimpleResponseEvent.connect(onChildViewSimpleResponseEvent);
-        //ChildViewServiceId.childViewResponseEvent.connect(onChildViewResponseEvent);
+        ChildViewServiceId.childViewResponseEvent.connect(onChildViewResponseEvent);
 
         // 初始化页面
         onViewInit();
 
 
-        // test add tab pages
+        /*// test add tab pages
         let tabPageUrl1 = "qrc:/views/default/tabpages/DefaultTabPage.qml";
         let tabPageTitle1 = "新标签页";
         let tabPageName1 = "tab1";
@@ -85,7 +103,7 @@ Rectangle {
         ret = tabViewId.addNewTabPage(tabPageName5, tabPageTitle5, tabPageUrl5,
                                       { backgroudColor: "#25823F"}
                                       );
-        console.log("DefaultTableView.qml Component.onCompleted addNewTabPage status:" + ret);
+        console.log("DefaultTableView.qml Component.onCompleted addNewTabPage status:" + ret);*/
 
 
     }
@@ -94,8 +112,8 @@ Rectangle {
         console.info("DefaultTableView.qml Component.onDestruction!");
 
         // 取消子页面服务事件绑定
-        //ChildViewServiceId.childViewSimpleResponseEvent.disconnect(onChildViewSimpleResponseEvent);
-        //ChildViewServiceId.childViewResponseEvent.disconnect(onChildViewResponseEvent);
+        ChildViewServiceId.childViewSimpleResponseEvent.disconnect(onChildViewSimpleResponseEvent);
+        ChildViewServiceId.childViewResponseEvent.disconnect(onChildViewResponseEvent);
 
 
 
@@ -105,10 +123,26 @@ Rectangle {
     // onViewInit : 页面初始化
     //
     function onViewInit() {
-        console.log("DefaultTableView.qml");
+        console.log("DefaultTableView.qml onViewInit");
 
-        //console.info("enum test: " + childViewServiceId.ChildViewMessageType.eAddViewResponse);
+        startupTimerId.start();
 
+    }
+
+    //
+    // onStartupEvent : 启动事件
+    //
+    function onStartupEvent() {
+        console.log("DefaultTabView.qml onStartupEvent");
+
+        // 初始化导航页面
+        let navigateOwnerObj = {};
+        navigateOwnerObj["name"] = "navigatePage";
+        navigateOwnerObj["title"] = "导航主页";
+        let navigateOwenrStr = ViewEvent.getViewOwnerStr(navigateOwnerObj);
+        let ret = ChildViewServiceId.addView(navigateOwnerObj["title"], navigateOwenrStr);
+
+        console.info("DefaultTabView.qml onStartupEvent addView status:" + ret + ", ownerStr:" + navigateOwenrStr);
     }
 
     //

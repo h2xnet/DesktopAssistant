@@ -21,5 +21,8 @@
         <file>image/default/start_menu2.png</file>
         <file>image/default/start_menu3.png</file>
         <file>hxxui/menu/StartMenu.qml</file>
+        <file>views/default/tabpages/NavigatePage.qml</file>
+        <file>js/common/helper.js</file>
+        <file>js/view/ViewEvent.js</file>
     </qresource>
 </RCC>

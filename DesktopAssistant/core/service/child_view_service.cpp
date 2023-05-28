@@ -183,8 +183,16 @@ int ChildViewService::write(const base::MessageBase* pMsg) {
 
 int ChildViewService::process(base::MessageBase* pMsg) {
     if (!pMsg) {
+        qInfo() << "ChildViewService::process params error";
         return ERROR_CODE_PARAM_ERROR;
     }
+    qDebug() << "ChildViewService::process params, type:" << pMsg->type \
+             << ", data:" << pMsg->data \
+             << ", sequeNo:" << pMsg->sequeNo   \
+             << ", sender:" << pMsg->sender \
+             << ", reciver:" << pMsg->reciver   \
+             << ", owner:" << pMsg->owner;
+
     int status = ERROR_CODE_FAIL;
     int ret = ERROR_CODE_OK;
     switch (pMsg->type) {
