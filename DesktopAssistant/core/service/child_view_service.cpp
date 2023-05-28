@@ -4,6 +4,7 @@
 #include "base/exception/error.h"
 #include "base/util/tool_util.h"
 #include "core/message/child_view_message.h"
+#include "sdk/message_package.h"
 
 #include <QDateTime>
 #include <QJsonObject>
@@ -43,6 +44,15 @@ ChildViewService::~ChildViewService() {
 
 void ChildViewService::onClientSocketConnected(QString strSessionId) {
     qDebug() << "ChildViewService::onClientSocketConnected sessionId:" << strSessionId;
+
+    int ret = -1;
+    // 有用户连接，发送欢迎消息
+    QString strWelcome = hxxda::getIPCWelcomeMessage("欢迎用户连接到页面服务器!");
+    if (m_ipc_server) {
+        ret = m_ipc_server->write(strSessionId, strWelcome, 3000);
+        qDebug() << "ChildViewService::onClientSocketConnected sedn welcome, status:" << ret    \
+                 << ", welcome:" << strWelcome;
+    }
 
 }
 

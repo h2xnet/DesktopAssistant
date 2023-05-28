@@ -90,4 +90,8 @@ const char* CommandLine::getStartViewKey() {
     return "startView";
 }
 
+const char* CommandLine::getViewIPCServerNameKey() {
+    return "viewIPCServerName";
+}
+
 } // end namespace base

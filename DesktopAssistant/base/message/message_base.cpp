@@ -2,6 +2,8 @@
 
 #include "base/util/tool_util.h"
 
+#include <QDateTime>
+
 namespace base {
 
 qint32 MessageBase::getSequeCount() {
@@ -39,6 +41,70 @@ QString MessageBase::buildMessage(int code, QString msg, QJsonObject dataObj) {
     obj.insert("msg", msg);
     obj.insert("data", dataObj);
     return base::ToolUtil::qjsonobjectToQstring(obj);
+}
+
+void MessageBase::reset() {
+    type = 0;
+    sequeNo = 0;
+    code = 0;
+    serializeTimes = 0;
+
+    sender = "";
+    reciver = "";
+    owner = "";
+    data = "";
+}
+
+QString MessageBase::serialize() {
+    QJsonObject obj;
+    obj.insert("sequeNo", sequeNo);
+    obj.insert("type", type);
+    obj.insert("data", data);
+    obj.insert("owner", owner);
+    obj.insert("sender", sender);
+    obj.insert("reciver", reciver);
+    obj.insert("code", code);
+    obj.insert("serializeTimes", QDateTime::currentMSecsSinceEpoch());
+
+    return base::ToolUtil::qjsonobjectToQstring(obj);
+}
+
+bool MessageBase::deserialize(const QString& str) {
+    if (str.isEmpty()) {
+        return false;
+    }
+
+    QJsonObject obj = base::ToolUtil::qstringToQjsonobject(str);
+    if (obj.isEmpty()) {
+        return false;
+    }
+
+    this->reset();
+    if (obj.contains("sequeNo")) {
+        sequeNo = obj.value("sequeNo").toInt();
+    }
+    if (obj.contains("type")) {
+        type = obj.value("type").toInt();
+    }
+    if (obj.contains("data")) {
+        data = obj.value("data").toString();
+    }
+    if (obj.contains("owner")) {
+        owner = obj.value("owner").toString();
+    }
+    if (obj.contains("sender")){
+        sender = obj.value("sender").toString();
+    }
+    if (obj.contains("reciver")) {
+        reciver = obj.value("reciver").toString();
+    }
+    if (obj.contains("code")) {
+        code = obj.value("code").toInt();
+    }
+    if (obj.contains("serializeTimes")) {
+        serializeTimes = (qint64)obj.value("serializeTimes").toDouble();
+    }
+    return true;
 }
 
 } // end namespace base

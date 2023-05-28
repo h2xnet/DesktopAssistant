@@ -29,8 +29,9 @@ LocalSocketClient::~LocalSocketClient() {
             m_socket->abort();
             m_socket->close();
         }
-        delete m_socket;
-        m_socket = nullptr;
+        m_socket->deleteLater();
+        //delete m_socket;
+        //m_socket = nullptr;
     }
 }
 

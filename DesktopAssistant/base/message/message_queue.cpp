@@ -32,7 +32,7 @@ bool MessageQueue::addItem(int type, QString data, QString owner, QString sender
             pNode->sender = QString("%1").arg(sender);
         }
         if (!reciver.isEmpty()) {
-            pNode->recver = QString("%1").arg(reciver);
+            pNode->reciver = QString("%1").arg(reciver);
         }
         bret = this->addItem(pNode);
     }

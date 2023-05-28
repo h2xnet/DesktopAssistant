@@ -36,6 +36,11 @@ public:
     //
     static const char* getStartViewKey();
 
+    //
+    // getViewIPCServerNameKey : 视图IPC通信服务名称键名
+    //
+    static const char* getViewIPCServerNameKey();
+
 private:
     QStringList onStringSplit(QString str, const QString& separate);
 

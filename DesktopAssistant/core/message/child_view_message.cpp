@@ -10,7 +10,7 @@ namespace core {
 ChildViewMessage::ChildViewMessage() : base::MessageBase()
 {
     sender = base::ToolUtil::getCurrentPID();
-    recver = sender;
+    reciver = sender;
 }
 
 ChildViewMessage::~ChildViewMessage() {

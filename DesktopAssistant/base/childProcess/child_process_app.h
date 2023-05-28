@@ -15,7 +15,7 @@ public:
     ChildProcessApp();
     virtual ~ChildProcessApp();
 
-    virtual int init(int argc, char* argv[]) = 0;
+    virtual int init(int argc, char* argv[], void* owner = nullptr) = 0;
 
     virtual int exec() = 0;
 

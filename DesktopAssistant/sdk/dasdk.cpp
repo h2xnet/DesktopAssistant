@@ -2,6 +2,9 @@
 
 #include "base/file/file_util.h"
 
+
+extern base::CommandLine g_command_line;
+
 namespace hxxda {
 
 QString getStartViewChildProcessCmd() {
@@ -20,6 +23,10 @@ QStringList getStartViewChildProcessArguments() {
     args << "-mainPid=" << QString::number(QApplication::applicationPid());
 
     return args;
+}
+
+base::CommandLine* getCommandLine() {
+    return &g_command_line;
 }
 
 } // end namespace hxxda

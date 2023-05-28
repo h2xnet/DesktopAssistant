@@ -8,8 +8,7 @@
 #include "base/util/command_line.h"
 
 #include "core/startup/startup.h"
-#include "core/process/viewProcessApp/view_process_app.h"
-
+#include "core/process/view_process_main.h"
 
 
 // 系统托盘
@@ -48,9 +47,9 @@ static QObject* ManagerSingleProvider(QQmlEngine* engine, QJSEngine* scriptEngin
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, false);
-    QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL, true);
+    //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    //QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, false);
+    //QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL, true);
 
     int ret = -1;
     QString strValue;
@@ -61,12 +60,8 @@ int main(int argc, char *argv[])
         strValue = g_command_line.getItemValue(base::CommandLine::getStartViewKey());
         if (strValue.compare("on", Qt::CaseInsensitive) == 0) {
             // 子页面进程
-            core::ViewProcessApp app;
-            ret = app.init(argc, argv);
-            if (ret != 0) {
-                return ret;
-            }
-            ret = app.exec();
+            core::ViewProcessMain app;
+            ret = app.main(argc, argv, &g_command_line);
             return ret;
         }
     }

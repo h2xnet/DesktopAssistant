@@ -25,7 +25,6 @@ SOURCES += \
         base/buffer/buffer.cpp \
         base/childProcess/child_process_app.cpp \
         base/childProcess/child_process_base.cpp \
-        base/childProcess/default_child_process.cpp \
         base/exception/exception.cpp \
         base/file/cfg_ini.cpp \
         base/file/file_util.cpp \
@@ -44,7 +43,7 @@ SOURCES += \
         core/message/child_view_message.cpp \
         core/message/default_message_handler.cpp \
         core/process/viewProcessApp/view_process_app.cpp \
-        core/process/view_process.cpp \
+        core/process/view_process_main.cpp \
         core/service/child_view_service.cpp \
         core/service/common/ipc_client_service.cpp \
         core/service/common/ipc_server_service.cpp \
@@ -52,6 +51,7 @@ SOURCES += \
         main.cpp \
         manager.cpp \
         sdk/dasdk.cpp \
+        sdk/message_package.cpp \
         third-part/systemTray/systemCursor/system_cursor_deal.cpp \
         third-part/systemTray/systemTray/system_tray_icon.cpp
 
@@ -73,7 +73,6 @@ HEADERS += \
     base/buffer/buffer.h \
     base/childProcess/child_process_app.h \
     base/childProcess/child_process_base.h \
-    base/childProcess/default_child_process.h \
     base/define.h \
     base/exception/error.h \
     base/exception/exception.h \
@@ -94,12 +93,13 @@ HEADERS += \
     core/message/child_view_message.h \
     core/message/default_message_handler.h \
     core/process/viewProcessApp/view_process_app.h \
-    core/process/view_process.h \
+    core/process/view_process_main.h \
     core/service/child_view_service.h \
     core/service/common/ipc_client_service.h \
     core/service/common/ipc_server_service.h \
     core/startup/startup.h \
     manager.h \
     sdk/dasdk.h \
+    sdk/message_package.h \
     third-part/systemTray/systemCursor/system_cursor_deal.h \
     third-part/systemTray/systemTray/system_tray_icon.h

@@ -33,6 +33,21 @@ public:
     static QJsonObject buildMessageObj(int code, QString msg, QJsonObject dataObj);
     static QString buildMessage(int code, QString msg, QJsonObject dataObj);
 
+    //
+    // reset : 重置
+    //
+    virtual void reset();
+
+    //
+    // serialize : 序列化
+    //
+    virtual QString serialize();
+
+    //
+    // deserialize : 反序列化
+    //
+    virtual bool deserialize(const QString& str);
+
 
     MessageBase();
     ~MessageBase();
@@ -43,9 +58,11 @@ public:
     QString owner; // 自定义数据
 
     QString sender; // 发送者
-    QString recver; // 接收者
+    QString reciver; // 接收者
 
     int code; // 最后执行结果
+
+    qint64 serializeTimes; // 序列化时间，单位：毫秒
 };
 
 } // end namespace base

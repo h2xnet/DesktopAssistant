@@ -2,6 +2,9 @@
 #define VIEW_PROCESS_APP_H
 
 #include "base/childProcess/child_process_app.h"
+#include "base/util/command_line.h"
+#include "core/service/common/ipc_client_service.h"
+#include "core/message/default_message_handler.h"
 
 #include <QObject>
 #include <QProcess>
@@ -16,7 +19,7 @@ namespace core {
  * Author: zfs
  * Date: 2023-05-20 20:32
  */
-class ViewProcessApp : public QObject, public base::ChildProcessApp
+class ViewProcessApp : public QObject, public base::ChildProcessApp, public core::DefaultMessageHandler
 {
     Q_OBJECT
 public:
@@ -26,11 +29,30 @@ public:
     //
     // base::ChildProcessApp
     //
-    virtual int init(int argc, char* argv[]) override;
+    virtual int init(int argc, char* argv[], void* owner = nullptr) override;
     virtual int exec() override;
     virtual int quit(int exitCode) override;
 
+    //
+    // core::DefaultMessageHandler
+    //
+    virtual int process(base::MessageBase* pMsg) override;
+
+
 public slots:
+
+    //
+    // core::IPCClientService
+    //
+    void onSelfSocketConnected();
+    void onSelfSocketDisConnected();
+    void onSelfSocketDataRecv(QString data);
+    void onSelfSocketStateChanged(int state);
+    void onSelfSocketExceptionError(int errorNo);
+
+
+public:
+signals:
 
 
 
@@ -38,6 +60,10 @@ private:
     bool m_running;
     int m_exit_code;
 
+    base::CommandLine* m_command_line; // 传递进来的命令行参数指针
+
+    // ipc
+    core::IPCClientService* m_ipc_service;
 
 };
 

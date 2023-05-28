@@ -30,6 +30,8 @@ namespace base  {
 // 40000 ~ 44999 :
 // 45000 ~ 49999 :
 //
+// 所有消息区间都是包含开始的序号，不包含结束序号
+//
 
 //
 // 默认消息类型
@@ -39,23 +41,42 @@ namespace base  {
 #endif
 
 //
+// 定义公共消息区间
+//
+#ifndef PUBLIC_MESSAGE_TART_TYPE
+#define PUBLIC_MESSAGE_TART_TYPE 1
+#endif
+
+#ifndef PUBLIC_MESSAGE_END_TYPE
+#define PUBLIC_MESSAGE_END_TYPE 5000
+#endif
+
+//
 // 定义子页面消息区间
 //
 #ifndef CHILD_VIEW_MESSAGE_START_TYPE
-#define CHILD_VIEW_MESSAGE_START_TYPE 1
+#define CHILD_VIEW_MESSAGE_START_TYPE 5000
 #endif
 
 #ifndef CHILD_VIEW_MESSAGE_END_TYPE
-#define CHILD_VIEW_MESSAGE_END_TYPE 5000
+#define CHILD_VIEW_MESSAGE_END_TYPE 10000
 #endif
 
 //
 // 用户消息类型值：必须要大于或等于 USER_MESSAGE_TYPE 定义的值，比如
 // #define USER_MESSAGE_ADD_VIEW (USER_MESSAGE_TYPE + 100)
 //
-#ifndef USER_MESSAGE_TYPE
-#define USER_MESSAGE_TYPE   50000
+#ifndef USER_MESSAGE_START_TYPE
+#define USER_MESSAGE_START_TYPE   50000
 #endif
+
+//
+// 公共消息定义
+//
+
+// 欢迎消息
+#define PUBLIC_MESSAGE_WELCOME_REQUEST  (PUBLIC_MESSAGE_TART_TYPE + 0)
+#define PUBLIC_MESSAGE_WELCOME_RESPONSE (PUBLIC_MESSAGE_TART_TYPE + 1)
 
 //
 // 子进程页面消息映射列表

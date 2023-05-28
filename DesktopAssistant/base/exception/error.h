@@ -16,6 +16,7 @@ namespace base {
 
 #define ERROR_CODE_NO_RESOURCE  -1000 // 资源耗尽
 #define ERROR_CODE_TIMEOUT  -1001   // 超时
+#define ERROR_CODE_INNER_ERROR   -1002 // 内部错误
 
 
 } // end namespace base
