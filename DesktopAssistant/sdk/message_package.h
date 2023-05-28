@@ -17,6 +17,15 @@ namespace hxxda {
  */
 QString getIPCWelcomeMessage(QString welcome, QString reciver = "", QString owner = "");
 
+/*
+ * Func: getIPCNodeResponseMessage
+ * Desc: 获取IPC发送节点信息应答消息
+ * Author: zfs
+ * Date: 2023-05-28 20:31
+ * @reciver: 接收者，如果为空，则默认接收者为主进程
+ */
+QString getIPCNodeResponseMessage(QString sender, QString reciver, QString owner = "");
+
 } // end namespace hxxda
 
 #endif // MESSAGE_PACKAGE_H

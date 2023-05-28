@@ -133,6 +133,11 @@ private:
     //
     int onProcessAddView(base::MessageBase* pMsg);
 
+    //
+    // onProcessNodeResponse : 处理节点数据应答消息
+    //
+    int onProcessNodeResponse(base::MessageBase* pMsg);
+
     // IPC 服务端对象
     base::LocalSocketServer* m_ipc_server;
 

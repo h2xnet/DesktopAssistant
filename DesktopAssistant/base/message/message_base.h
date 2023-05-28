@@ -63,6 +63,9 @@ public:
     int code; // 最后执行结果
 
     qint64 serializeTimes; // 序列化时间，单位：毫秒
+
+    QString sessionId; // 会话ID（内部使用）
+
 };
 
 } // end namespace base

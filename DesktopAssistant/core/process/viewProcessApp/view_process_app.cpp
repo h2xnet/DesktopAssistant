@@ -1,6 +1,10 @@
 #include "view_process_app.h"
 
+#include "base/exception/error.h"
 #include "sdk/dasdk.h"
+#include "sdk/message_package.h"
+
+#include <QApplication>
 
 namespace core {
 
@@ -17,6 +21,9 @@ ViewProcessApp::ViewProcessApp() : QObject(nullptr), m_running(true), m_exit_cod
         connect(m_ipc_service, SIGNAL(selfSocketExceptionError(int)), this, SLOT(onSelfSocketExceptionError(int)) );
 
     }
+
+    // 初始化自身节点信息
+    m_node_info.selfPID = QString::number(QApplication::applicationPid());
 
 }
 
@@ -106,17 +113,25 @@ void ViewProcessApp::onSelfSocketExceptionError(int errorNo) {
 }
 
 int ViewProcessApp::process(base::MessageBase* pMsg) {
+    int ret = 0;
     switch (pMsg->type) {
     case PUBLIC_MESSAGE_WELCOME_REQUEST: {
         // 欢迎消息
-
-        //
-        // 发送自身的基础消息
-        //
-
+        ret = this->onProcessWelcome(pMsg);
+        ret = ERROR_CODE_OK;
     }break;
     }
-    return 0;
+    return ret;
+}
+
+int ViewProcessApp::onProcessWelcome(base::MessageBase* pMsg) {
+    // 保存主进程ID
+    m_node_info.mainPID = QString("%1").arg(pMsg->sender);
+
+    // 发送自己节点信息
+    QString strNodeMsg = hxxda::getIPCNodeResponseMessage(m_node_info.selfPID, m_node_info.mainPID, "");
+    int ret = m_ipc_service->send(strNodeMsg);
+    return ret;
 }
 
 

@@ -65,7 +65,10 @@ void ChildViewService::onClientSocketDisConnected(QString strSessionId) {
 
 void ChildViewService::onClientSocketDataRecv(QString strSessionId, QString data) {
     // 解析接收到的IPC数据，以消息的方式放入处理队列
-
+    base::MessageBase msg;
+    if (msg.deserialize(data)) {
+        this->addTask(msg.type, msg.data, msg.owner, msg.sender, msg.reciver, strSessionId);
+    }
 }
 
 void ChildViewService::onClientSocketStateChanged(QString strSessionId, int state) {
@@ -139,33 +142,6 @@ bool ChildViewService::onModifySession(const QString& viewId, const QString& str
     return false;
 }
 
-int ChildViewService::write(const base::MessageBase* pMsg) {
-    return 0;
-}
-
-//int ChildViewService::read(base::MessageBase* pMsg) {
-//    return 0;
-//}
-
-int ChildViewService::process(base::MessageBase* pMsg) {
-    if (!pMsg) {
-        return ERROR_CODE_PARAM_ERROR;
-    }
-    int status = ERROR_CODE_FAIL;
-    int ret = ERROR_CODE_OK;
-    switch (pMsg->type) {
-    case CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST: {
-        // 添加页面请求
-        status = this->onProcessAddView(pMsg);
-        ret = ERROR_CODE_OK;
-    }break;
-    default: {
-        ret = ERROR_CODE_OK;
-    }break;
-    }
-    return ret;
-}
-
 int ChildViewService::beginRun(QString ipcServerName) {
     if (ipcServerName.isEmpty()) {
         ipcServerName = CHILD_VIEW_SERVICE_SERVER_NAME;
@@ -194,6 +170,38 @@ int ChildViewService::beginRun(QString ipcServerName) {
         ret = -3;
     }
 
+    return ret;
+}
+
+int ChildViewService::write(const base::MessageBase* pMsg) {
+    return 0;
+}
+
+//int ChildViewService::read(base::MessageBase* pMsg) {
+//    return 0;
+//}
+
+int ChildViewService::process(base::MessageBase* pMsg) {
+    if (!pMsg) {
+        return ERROR_CODE_PARAM_ERROR;
+    }
+    int status = ERROR_CODE_FAIL;
+    int ret = ERROR_CODE_OK;
+    switch (pMsg->type) {
+    case CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST: {
+        // 添加页面请求
+        status = this->onProcessAddView(pMsg);
+        ret = ERROR_CODE_OK;
+    }break;
+    case PUBLIC_MESSAGE_NODE_RESPONSE: {
+        // 子进程上报节点信息消息
+        status = this->onProcessNodeResponse(pMsg);
+        ret = ERROR_CODE_OK;
+    }break;
+    default: {
+        ret = ERROR_CODE_OK;
+    }break;
+    }
     return ret;
 }
 
@@ -279,8 +287,34 @@ int ChildViewService::onProcessAddView(base::MessageBase* pMsg) {
 
     emit childViewResponseEvent(CHILD_VIEW_MESSAGE_ADD_VIEW_RESPONSE, ret, replayObj, pMsg->owner);
 
+    return ERROR_CODE_OK;
 }
 
+int ChildViewService::onProcessNodeResponse(base::MessageBase* pMsg) {
+    qDebug() << "ChildViewService::onProcessNodeResponse params, type:" << pMsg->type   \
+             << ", sender:" << pMsg->sender \
+             << ", reciver:" << pMsg->reciver   \
+             << ", data:" << pMsg->data\
+             << ", owner:" << pMsg->owner   \
+             << ", sequeNo:" << pMsg->sequeNo;
+
+    // 更新会话信息(主要更新viewID，目前用子进程ID作为viewID)
+    this->onModifySession(pMsg->sender, pMsg->sessionId);
+
+    // 发送通知消息
+    QJsonObject dataObj;
+    dataObj.insert("viewId", pMsg->sender);
+    dataObj.insert("sessionId", pMsg->sessionId);
+
+    QJsonObject replayObj;
+    replayObj.insert("code", ERROR_CODE_DATA_OK);
+    replayObj.insert("msg", "成功");
+    replayObj.insert("data", dataObj);
+
+    emit childViewResponseEvent(PUBLIC_MESSAGE_NODE_RESPONSE, ERROR_CODE_OK, replayObj, pMsg->owner);
+
+    return ERROR_CODE_OK;
+}
 
 
 } // end namespace core

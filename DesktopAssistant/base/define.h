@@ -78,6 +78,10 @@ namespace base  {
 #define PUBLIC_MESSAGE_WELCOME_REQUEST  (PUBLIC_MESSAGE_TART_TYPE + 0)
 #define PUBLIC_MESSAGE_WELCOME_RESPONSE (PUBLIC_MESSAGE_TART_TYPE + 1)
 
+// 节点信息，主要是进程ID，用于IPC通信使用
+#define PUBLIC_MESSAGE_NODE_REQUEST     (PUBLIC_MESSAGE_TART_TYPE + 2)
+#define PUBLIC_MESSAGE_NODE_RESPONSE    (PUBLIC_MESSAGE_TART_TYPE + 3)
+
 //
 // 子进程页面消息映射列表
 //
@@ -85,6 +89,15 @@ namespace base  {
 // 添加子页面消息
 #define CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST     (CHILD_VIEW_MESSAGE_START_TYPE + 0)
 #define CHILD_VIEW_MESSAGE_ADD_VIEW_RESPONSE    (CHILD_VIEW_MESSAGE_START_TYPE + 1)
+
+
+//
+// 进程间通信节点信息
+//
+typedef struct IPC_NODE_INFO_ {
+    QString mainPID; // 主进程ID
+    QString selfPID; // 自身进程ID，如果自身进程就是主进程，则和aminPID会一样
+} IPC_NODE_INFO, *LPIPC_NODE_INFO;
 
 } // end namespace base
 

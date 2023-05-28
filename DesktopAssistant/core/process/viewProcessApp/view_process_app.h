@@ -57,6 +57,11 @@ signals:
 
 
 private:
+    //
+    // onProcessWelcome : 处理欢迎消息
+    //
+    int onProcessWelcome(base::MessageBase* pMsg);
+
     bool m_running;
     int m_exit_code;
 
@@ -64,6 +69,9 @@ private:
 
     // ipc
     core::IPCClientService* m_ipc_service;
+
+    // 进程节点信息
+    base::IPC_NODE_INFO m_node_info;
 
 };
 

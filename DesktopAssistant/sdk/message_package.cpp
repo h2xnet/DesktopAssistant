@@ -32,5 +32,23 @@ QString getIPCWelcomeMessage(QString welcome, QString reciver, QString owner) {
     return msg.serialize();
 }
 
+//
+// getIPCNodeResponseMessage : 获取IPC节点信息消息
+//
+QString getIPCNodeResponseMessage(QString sender, QString reciver, QString owner) {
+    base::MessageBase msg;
+    msg.sequeNo = base::MessageBase::getSequeCount();
+    msg.type = PUBLIC_MESSAGE_NODE_RESPONSE;
+    msg.sender = QString("%1").arg(sender);
+    if (!reciver.isEmpty()) {
+        msg.reciver = QString("%1").arg(reciver);
+    }
+    if (!owner.isEmpty()) {
+        msg.owner = QString("%1").arg(owner);
+    }
+
+    return msg.serialize();
+}
+
 
 } // end namespace hxxda

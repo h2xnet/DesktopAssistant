@@ -11,7 +11,8 @@ MessageQueue::~MessageQueue() {
     this->clear();
 }
 
-bool MessageQueue::addItem(int type, QString data, QString owner, QString sender, QString reciver, int sequeNo) {
+bool MessageQueue::addItem(int type, QString data, QString owner, QString sender,
+                           QString reciver, QString sessionId, int sequeNo) {
     if (sequeNo == 0) {
         sequeNo = MessageBase::getSequeCount();
     }
@@ -33,6 +34,9 @@ bool MessageQueue::addItem(int type, QString data, QString owner, QString sender
         }
         if (!reciver.isEmpty()) {
             pNode->reciver = QString("%1").arg(reciver);
+        }
+        if (!sessionId.isEmpty()) {
+            pNode->sessionId = QString("%1").arg(sessionId);
         }
         bret = this->addItem(pNode);
     }

@@ -53,6 +53,7 @@ void MessageBase::reset() {
     reciver = "";
     owner = "";
     data = "";
+    sessionId = "";
 }
 
 QString MessageBase::serialize() {
@@ -65,6 +66,7 @@ QString MessageBase::serialize() {
     obj.insert("reciver", reciver);
     obj.insert("code", code);
     obj.insert("serializeTimes", QDateTime::currentMSecsSinceEpoch());
+    obj.insert("sessionId", sessionId);
 
     return base::ToolUtil::qjsonobjectToQstring(obj);
 }
@@ -103,6 +105,9 @@ bool MessageBase::deserialize(const QString& str) {
     }
     if (obj.contains("serializeTimes")) {
         serializeTimes = (qint64)obj.value("serializeTimes").toDouble();
+    }
+    if (obj.contains("sessionId")) {
+        sessionId = obj.value("sessionId").toString();
     }
     return true;
 }

@@ -40,7 +40,8 @@ public:
      * @data: 任务请求数据，主要是请求参数，可以为空
      * @owner: 传递的自定义数据，可以为空
      */
-    Q_INVOKABLE int addTask(int type, QString data, QString owner, QString sender, QString reciver, int timeout = DEF_LOCK_TIMEOUT);
+    Q_INVOKABLE int addTask(int type, QString data, QString owner, QString sender, QString reciver,
+                            QString sessionId = "", int timeout = DEF_LOCK_TIMEOUT);
 
     /*
      * Func: addTask

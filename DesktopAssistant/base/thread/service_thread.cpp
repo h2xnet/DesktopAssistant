@@ -30,7 +30,8 @@ void ServiceThread::setMaxTaskCount(int val) {
     m_max_task_count = val;
 }
 
-int ServiceThread::addTask(int type, QString data, QString owner, QString sender, QString reciver, int timeout) {
+int ServiceThread::addTask(int type, QString data, QString owner, QString sender, QString reciver,
+                           QString sessionId, int timeout) {
     if (m_task_queue.getCount() >= m_max_task_count) {
         return ERROR_CODE_NO_RESOURCE;
     }
@@ -39,7 +40,7 @@ int ServiceThread::addTask(int type, QString data, QString owner, QString sender
     }
     bool bret = false;
     if (m_mutex.tryLock(timeout)) {
-        bret = m_task_queue.addItem(type, data, owner, sender, reciver);
+        bret = m_task_queue.addItem(type, data, owner, sender, reciver, sessionId);
         m_mutex.unlock();
     }
     return bret ? ERROR_CODE_OK : ERROR_CODE_TIMEOUT;
