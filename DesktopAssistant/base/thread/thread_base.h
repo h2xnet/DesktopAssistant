@@ -2,6 +2,7 @@
 #define THREAD_BASE_H
 
 #include <QThread>
+#include <QDebug>
 
 namespace base {
 

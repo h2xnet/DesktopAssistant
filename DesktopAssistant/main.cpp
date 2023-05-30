@@ -51,22 +51,7 @@ int main(int argc, char *argv[])
     //QCoreApplication::setAttribute(Qt::AA_UseOpenGLES, false);
     //QCoreApplication::setAttribute(Qt::AA_UseSoftwareOpenGL, true);
 
-    int ret = -1;
-    QString strValue;
-    // 根据输入的参数，启动不同的进程
-    g_command_line.parse(argc, argv);
-    if (g_command_line.contain(base::CommandLine::getStartViewKey())) {
-        // 子页面进程
-        strValue = g_command_line.getItemValue(base::CommandLine::getStartViewKey());
-        if (strValue.compare("on", Qt::CaseInsensitive) == 0) {
-            // 子页面进程
-            core::ViewProcessMain app;
-            ret = app.main(argc, argv, &g_command_line);
-            return ret;
-        }
-    }
 
-    // 主窗口进程
     //QGuiApplication app(argc, argv);
     QApplication app(argc, argv);
 
@@ -78,6 +63,32 @@ int main(int argc, char *argv[])
     base::Log::setLogRange(0);
     base::Log::init(logFileName);
 
+    qInfo() << "input argc:" << argc;
+    for(int idx = 0; idx < argc; idx++) {
+        qInfo() << " argv[" << idx << "] = " << argv[idx];
+    }
+
+    int ret = -1;
+    QString strValue;
+    // 根据输入的参数，启动不同的进程
+    g_command_line.parse(argc, argv);
+    g_command_line.print();
+
+    if (g_command_line.contain(base::CommandLine::getStartViewKey())) {
+        // 子页面进程
+        strValue = g_command_line.getItemValue(base::CommandLine::getStartViewKey());
+        if (strValue.compare("on", Qt::CaseInsensitive) == 0) {
+            // 子页面进程
+            core::ViewProcessMain viewApp;
+            ret = viewApp.main(argc, argv, &g_command_line);
+            app.exec();
+            qInfo() << "子进程退出，退出代码为:" << ret;
+            base::Log::uninit();
+            return ret;
+        }
+    }
+
+    // 主窗口进程
     ret = g_app.init();
     qInfo() << "主程序应用初始化结果:" << ret;
 

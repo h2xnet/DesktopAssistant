@@ -162,6 +162,7 @@ int ChildViewService::beginRun(QString ipcServerName) {
             return ret;
         }
 
+        this->setRunning(true);
         this->start();
         ret = 0;
     }
@@ -184,7 +185,7 @@ int ChildViewService::write(const base::MessageBase* pMsg) {
 int ChildViewService::process(base::MessageBase* pMsg) {
     if (!pMsg) {
         qInfo() << "ChildViewService::process params error";
-        return ERROR_CODE_PARAM_ERROR;
+        return ERROR_CODE_OK;
     }
     qDebug() << "ChildViewService::process params, type:" << pMsg->type \
              << ", data:" << pMsg->data \

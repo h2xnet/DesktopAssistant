@@ -18,9 +18,11 @@ QString getStartViewChildProcessCmd() {
 }
 
 QStringList getStartViewChildProcessArguments() {
+    QString strArg1 = QString("-mainPid=%1").arg(QString::number(QApplication::applicationPid()));
+
     QStringList args;
     args << "-startView=on";
-    args << "-mainPid=" << QString::number(QApplication::applicationPid());
+    args << strArg1;
 
     return args;
 }

@@ -83,7 +83,7 @@ void LocalSocketServer::newConnectHandler() {
         connect(socket, SIGNAL(disconnected()), this, SLOT(onSocketDisConnected()));
         connect(socket, SIGNAL(error(QLocalSocket::LocalSocketError)), this, SLOT(onSocketError(QLocalSocket::LocalSocketError)));
         connect(socket, SIGNAL(readyRead()), this, SLOT(onSocketReadyRead()));
-        connect(socket, SIGNAL(stateChanged(QLocalSocket::LocalSocketState socketState)), this, SLOT(onSocketStateChanged(QLocalSocket::LocalSocketState socketState)));
+        connect(socket, SIGNAL(stateChanged(QLocalSocket::LocalSocketState)), this, SLOT(onSocketStateChanged(QLocalSocket::LocalSocketState)));
     }
 }
 

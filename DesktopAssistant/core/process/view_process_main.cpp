@@ -26,7 +26,7 @@ int ViewProcessMain::main(int argc, char* argv[], void* owner) {
         return ret;
     }
 
-    ret = app.exec();
+    //ret = app.exec();
 
     return ret;
 }

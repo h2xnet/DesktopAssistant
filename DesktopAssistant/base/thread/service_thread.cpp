@@ -66,6 +66,7 @@ void ServiceThread::run() {
 }
 
 int ServiceThread::onWork() {
+    qInfo() << "ServiceThread::onWork enter, running:" << m_running;
     bool isNeedDelay = true;
     while(m_running) {
         // 加载待处理任务
@@ -85,6 +86,8 @@ int ServiceThread::onWork() {
             QThread::msleep(100);
         }
     }
+
+    qInfo() << "ServiceThread::onWork leave";
     return 0;
 }
 

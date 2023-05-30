@@ -26,7 +26,7 @@ int CommandLine::parse(int argc, char* argv[]) {
     this->updateItemValue(CommandLine::getExeFileNameKey(), argv[0]);
 
     for(int i = 1; i < argc; i++) {
-        qInfo() << "命令行参数项，序号:" << i << " 值:" << argv[i];
+        qInfo() << "command item " << QString::number(i) << " => " << argv[i];
         QString strItem = argv[i];
         QStringList arrs = this->onStringSplit(strItem, "=");
         if (arrs.size() != 2) {
@@ -72,26 +72,24 @@ bool CommandLine::contain(const QString& key) {
 }
 
 void CommandLine::print() {
-    qInfo() << "有效命令行参数列表:";
-
-    qInfo() << "    命令行总个数:" << m_command_lines.size();
+    qInfo() << "valid command count: " << m_command_lines.size();
     for(auto it = m_command_lines.begin(); it != m_command_lines.end(); it++) {
-        qInfo() <<" 命令行项参数: " << it.key() << " => " << it.value();
+        qInfo() <<" comman item: " << it.key() << " => " << it.value();
     }
 
-    qInfo() << "输出完毕";
+    qInfo() << "valid command end";
 }
 
 const char* CommandLine::getExeFileNameKey() {
-    return "exeFileName";
+    return "-exeFileName";
 }
 
 const char* CommandLine::getStartViewKey() {
-    return "startView";
+    return "-startView";
 }
 
 const char* CommandLine::getViewIPCServerNameKey() {
-    return "viewIPCServerName";
+    return "-viewIPCServerName";
 }
 
 } // end namespace base
