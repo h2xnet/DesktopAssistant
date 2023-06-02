@@ -7,6 +7,7 @@ import "../../hxxui/tab"
 
 import desktopAssistant.net.pc 1.0
 
+import "../../js/common/CommonEvent.js" as CommonEvent;
 import "../../js/view/ViewEvent.js" as ViewEvent;
 
 Rectangle {
@@ -173,6 +174,7 @@ Rectangle {
         paramsObj["owner"] = owner;
         console.log("DefaultTabView.qml onChildViewResponseEvent params: " + JSON.stringify(paramsObj));
 
+        CommonEvent.childViewResponseEventHandler(type, status, obj, owner, tabViewId);
     }
 
 
