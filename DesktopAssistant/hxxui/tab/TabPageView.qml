@@ -222,7 +222,7 @@ Rectangle {
 
     //
     // addNewTabPage : 添加新的tab页面，成功返回序号，失败返回-1
-    // @tabName: TAB页名称，最好唯一
+    // @tabId: TAB页ID，最好唯一
     // @tabTitle: TAB页标题
     // @tabPageUrl: TAB页地址
     // @param: TAB页初始属性参数，可以为空
@@ -235,7 +235,7 @@ Rectangle {
             itemTabPage["title"] = tabTitle;
             itemTabPage["path"] = tabPageUrl;
             itemTabPage["active"] = true;
-            itemTabPage["name"] = tabName;
+            itemTabPage["vid"] = tabName;
             itemTabPage["param"] = param;
 
             modelDatas.append(itemTabPage);

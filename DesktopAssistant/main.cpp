@@ -124,6 +124,8 @@ int main(int argc, char *argv[])
 
     qInfo() << "主程序退出，退出代码为:" << ret;
 
+    g_app.uninit();
+
     base::Log::uninit();
 
     return ret;

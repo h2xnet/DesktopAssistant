@@ -15,6 +15,8 @@ public:
 
     Q_INVOKABLE bool init();
 
+    Q_INVOKABLE void uninit();
+
     /*
      * Func: getStartup
      * Desc: 获取启动器

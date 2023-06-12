@@ -63,17 +63,5 @@ function parseResponseEvent(code, resultStr) {
     return obj;
 }
 
-/*
- * Func: childViewResponseEventHandler
- * Desc: 子页面应答事件处理器
- * Author: zfs
- * Date: 2023-06-03 07:20
- * @privateOwner: 私有数据，主要用于事件处理，比如某个控件对象，也可以为空
- */
-function childViewResponseEventHandler(type, status, obj, owner, privateOwner = null) {
 
-    if (type === getMessageTypeValue("CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST", -1)) {
-        // 添加子页面
-    }
-}
 

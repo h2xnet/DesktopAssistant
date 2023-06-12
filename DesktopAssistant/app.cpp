@@ -67,6 +67,13 @@ bool App::init() {
     return true;
 }
 
+void App::uninit() {
+    if (g_child_view_service) {
+        g_child_view_service->setRunning(false);
+        g_child_view_service->deleteLater();
+    }
+}
+
 core::Startup* App::getStartup() {
     return &g_startup;
 }

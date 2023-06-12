@@ -167,6 +167,7 @@ Rectangle {
     // onChildViewResponseEvent : 子页面事件
     //
     function onChildViewResponseEvent(type, status, obj, owner) {
+        // {"type":5001,"status":0,"obj":{"code":200,"data":{"viewId":"12756","viewTitle":"导航主页"},"msg":"成功"}}
         let paramsObj = {};
         paramsObj["type"] = type;
         paramsObj["status"] = status;
@@ -174,7 +175,55 @@ Rectangle {
         paramsObj["owner"] = owner;
         console.log("DefaultTabView.qml onChildViewResponseEvent params: " + JSON.stringify(paramsObj));
 
-        CommonEvent.childViewResponseEventHandler(type, status, obj, owner, tabViewId);
+        //CommonEvent.childViewResponseEventHandler(type, status, obj, owner, tabViewId);
+        if (type === CommonEvent.getMessageTypeValue("CHILD_VIEW_MESSAGE_ADD_VIEW_REQUEST", -1)) {
+            // 添加子页面
+            onAddViewHandler(status, obj, owner);
+        }
+
+    }
+
+    //
+    // onAddViewHandler : 添加页面处理器
+    //
+    function onAddViewHandler(status, obj, owner) {
+        let paramsObj = {};
+        paramsObj["status"] = status;
+        paramsObj["obj"] = obj;
+        paramsObj["owner"] = owner;
+        console.log("DefaultTabView.qml onAddViewHandler params: " + JSON.stringify(paramsObj));
+
+        if (status !== 0) {
+            // 失败
+        }
+        else {
+            let code = obj["code"];
+            if (code === 200) {
+                let dataObj = obj["data"];
+                let viewId = dataObj["viewId"];
+                let viewTitle = dataObj["viewTitle"];
+                onAddNewViewUI(viewId, viewTitle, owner);
+            }
+        }
+
+    }
+
+    //
+    // onAddNewViewUI : 增加新的视图界面
+    //
+    function onAddNewViewUI(viewId, viewTitle, owner, viewBackgroudColor = null) {
+        let tabPageUrl = "qrc:/views/default/tabpages/DefaultTabPage.qml";
+
+        var params = {};
+        if (viewBackgroudColor !== null) {
+            params["backgroudColor"] = viewBackgroudColor;
+        }
+        else {
+             params["backgroudColor"] = "#BDBDBD";
+        }
+        let ret = tabViewId.addNewTabPage(viewId, viewTitle, tabPageUrl, params);
+        console.log("DefaultTableView.qml onAddNewViewUI status:" + ret);
+
     }
 
 
