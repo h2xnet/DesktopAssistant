@@ -28,6 +28,7 @@ SOURCES += \
         base/exception/exception.cpp \
         base/file/cfg_ini.cpp \
         base/file/file_util.cpp \
+        base/log/file_log.cpp \
         base/log/log.cpp \
         base/message/ipc/local_socket_client.cpp \
         base/message/ipc/local_socket_server.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     base/exception/exception.h \
     base/file/cfg_ini.h \
     base/file/file_util.h \
+    base/log/file_log.h \
     base/log/log.h \
     base/message/ipc/local_socket_client.h \
     base/message/ipc/local_socket_server.h \

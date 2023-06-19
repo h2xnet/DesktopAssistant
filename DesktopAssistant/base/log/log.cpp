@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QMutex>
 #include <QTextStream>
+#include <QDebug>
 
 namespace base {
 
@@ -31,8 +32,9 @@ void Log::clearLogFiles(QString logFileName, int preDays/* = 7*/) {
         preDays = 3;
     }
 
-    QString logPath = QCoreApplication::applicationDirPath();
-    QString path = logPath + "/log";
+    //QString logPath = QCoreApplication::applicationDirPath();
+    //QString path = logPath + "/log";
+    QString path = FileUtil::getLogPath("log");
     QString strSearchText = logFileName;
 
     if (strSearchText.isEmpty()) {
@@ -94,11 +96,7 @@ void Log::messageOutput(QtMsgType type, const QMessageLogContext& context, const
             }
 
             // log path
-            QString strLogPath = FileUtil::getAppSubFileName(QString("log"));
-
-            if (!FileUtil::pathIsExist(strLogPath, true)) {
-                return;
-            }
+            QString strLogPath = FileUtil::getLogPath("log");
 
             QDateTime currentTime = QDateTime::currentDateTime();//yyyy.MM.dd hh:mm:ss.zzz ddd
             QString currentTimeStr =currentTime .toString("yyyy-MM-dd-hh");
@@ -150,14 +148,8 @@ int Log::getLogRange() {
 bool Log::init(QString fileName) {
     //QMutexLocker lock(&mutex_);
 
-    QString strLogPath = FileUtil::getAppSubFileName(QString("log"));
-
-    qDebug("Log::init log path: %s\n", strLogPath.toUtf8().data());
-
-    if (!FileUtil::pathIsExist(strLogPath, true)) {
-        qDebug("Log::init log path is not exist.\n");
-        return false;
-    }
+    QString strLogPath = FileUtil::getLogPath("log");
+    qInfo() << "Log::init log path:" << strLogPath;
 
     QDateTime currentTime = QDateTime::currentDateTime();//yyyy.MM.dd hh:mm:ss.zzz ddd
     QString currentTimeStr = currentTime .toString("yyyy-MM-dd-hh");
@@ -169,7 +161,7 @@ bool Log::init(QString fileName) {
 
     QString logFileName = strLogPath + QDir::separator() + currentTimeStr + "-" + fileName;
 
-    qDebug("Log::init log fileName: %s\n", logFileName.toUtf8().data());
+    qInfo("Log::init log fileName: %s\n", logFileName.toUtf8().data());
 
     // 打开文件
     file_ = new QFile(logFileName);

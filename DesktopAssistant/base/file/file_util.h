@@ -28,6 +28,14 @@ public:
     static QString getAppSubFileName(QString subFileName);
 
     /*
+     * Function: getLogPath
+     * Desc: 获取日志文件路径
+     * Author: zfs
+     * Date: 2022-06-20 07:12
+     */
+    static QString getLogPath(QString logFolderName = "log");
+
+    /*
      * Function: fileIsExist
      * Desc: 判断文件是否存在
      * Author: zfs

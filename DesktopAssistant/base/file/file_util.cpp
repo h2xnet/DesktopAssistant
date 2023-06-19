@@ -26,6 +26,16 @@ QString FileUtil::getAppSubFileName(QString subFileName) {
     return getAppPath() + QDir::separator() + subFileName;
 }
 
+QString FileUtil::getLogPath(QString logFolderName) {
+    if (!logFolderName.isEmpty()) {
+        QString path = getAppSubFileName(logFolderName);
+        if (pathIsExist(path, true)) {
+            return path;
+        }
+    }
+    return getAppPath();
+}
+
 //
 // fileIsExist : 判断文件是否存在
 //
